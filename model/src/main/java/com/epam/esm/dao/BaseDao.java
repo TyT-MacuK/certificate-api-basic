@@ -2,6 +2,7 @@ package com.epam.esm.dao;
 
 import com.epam.esm.entity.AbstractEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,12 +30,12 @@ public interface BaseDao<K, N, T extends AbstractEntity> {
     Optional<T> findById(K id);
 
     /**
-     * Find by name optional.
+     * Find by part of name list.
      *
-     * @param name the name
-     * @return the optional
+     * @param partOfName the part of name
+     * @return the list
      */
-    Optional<T> findByName(N name);
+    List<T> findByPartOfName(N partOfName);
 
     /**
      * Delete boolean.

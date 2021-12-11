@@ -1,6 +1,7 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,21 +10,8 @@ import java.util.Optional;
  * The interface Gift certificate dao.
  */
 public interface GiftCertificateDao extends BaseDao <Long, String, GiftCertificate> {
-    /**
-     * Find by tag name optional.
-     *
-     * @param tagName the tag name
-     * @return the optional
-     */
-    Optional<GiftCertificate> findByTagName(String tagName);
 
-    /**
-     * Find by part of tag name list.
-     *
-     * @param partOfTagName the part of tag name
-     * @return the list
-     */
-    List<GiftCertificate> findByPartOfTagName(String partOfTagName);
+    List<Tag> findCertificateTags(Long giftCertificateId);
 
     /**
      * Find all certificate list.
@@ -38,5 +26,9 @@ public interface GiftCertificateDao extends BaseDao <Long, String, GiftCertifica
      * @param certificate the certificate
      * @return the boolean
      */
-    boolean updateName(GiftCertificate certificate);
+    boolean update(GiftCertificate certificate);
+
+    boolean detachAllTags(Long giftCertificateId);
+
+    boolean attach(Long giftCertificateId, Long tagId);
 }
