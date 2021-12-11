@@ -1,17 +1,20 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.dto.TagDto;
+import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.exception.InvalidEntityDataException;
 import com.epam.esm.exception.InvalidSortOderNameException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GiftCertificateService extends BaseService <Long, String, GiftCertificateDto> {
-    Optional<GiftCertificateDto> findByTagName(String tagName);
 
-    List<GiftCertificateDto> findByPartOfTagName(String partOfTagName);
+    List<TagDto> findCertificateTags(Long giftCertificateId) throws EntityNotFoundException;
 
     List<GiftCertificateDto> sortCertificate(String sortOrder) throws InvalidSortOderNameException;
 
-    boolean updateGiftCertificate(GiftCertificateDto certificate);
+    boolean updateGiftCertificate(GiftCertificateDto certificate) throws EntityNotFoundException, InvalidEntityDataException;
+
+    boolean attach(Long giftCertificateId, Long tagId) throws EntityNotFoundException;
 }
