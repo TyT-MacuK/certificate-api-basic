@@ -1,24 +1,11 @@
 plugins {
-    id 'java'
-}
-
-repositories {
-    mavenCentral()
+    id 'java-library'
 }
 
 dependencies {
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: hikariVersion
+    implementation group: 'mysql', name: 'mysql-connector-java', version: mysqlConnectorVersion
+    implementation group: 'com.h2database', name: 'h2', version: h2Version
 
-    implementation group: 'org.springframework', name: 'spring-core', version: '5.3.12'
-    implementation group: 'org.springframework', name: 'spring-context', version: '5.3.12'
-    implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.3.12'
-
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.27'
-
-    implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.0'
-}
-
-test {
-    useJUnitPlatform()
+    testImplementation group: 'org.springframework', name: 'spring-test', version: springVersion
 }
