@@ -14,7 +14,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,8 +73,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private final TagMapper tagMapper;
 
     @Autowired
-    public GiftCertificateDaoImpl(DataSource dataSource, GiftCertificateMapper certificateMapper, TagMapper tagMapper) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    public GiftCertificateDaoImpl(NamedParameterJdbcTemplate namedJdbcTemplate, GiftCertificateMapper certificateMapper,
+                                  TagMapper tagMapper) {
+        this.jdbcTemplate = namedJdbcTemplate;
         this.certificateMapper = certificateMapper;
         this.tagMapper = tagMapper;
     }

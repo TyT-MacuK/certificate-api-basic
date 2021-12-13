@@ -6,7 +6,6 @@ import com.epam.esm.exception.EntityAlreadyExistsException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InvalidEntityDataException;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.impl.TagServiceImpl;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

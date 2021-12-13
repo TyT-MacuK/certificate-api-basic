@@ -48,8 +48,8 @@ public class TagDaoImpl implements TagDao {
     private final GiftCertificateMapper certificateMapper;
 
     @Autowired
-    public TagDaoImpl(DataSource dataSource, TagMapper tagMapper, GiftCertificateMapper certificateMapper) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    public TagDaoImpl(NamedParameterJdbcTemplate namedJdbcTemplate, TagMapper tagMapper, GiftCertificateMapper certificateMapper) {
+        this.jdbcTemplate = namedJdbcTemplate;
         this.tagMapper = tagMapper;
         this.certificateMapper = certificateMapper;
     }

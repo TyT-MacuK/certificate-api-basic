@@ -19,7 +19,7 @@ public class TagValidator {
         logger.log(Level.DEBUG, "method validateName()");
         List<TypeOfValidationError> validationErrors = new ArrayList<>();
 
-        boolean nameIsValid = !tagName.isEmpty() && Pattern.matches(NAME_REGEX, tagName);
+        boolean nameIsValid = tagName != null && !tagName.isEmpty() && Pattern.matches(NAME_REGEX, tagName);
         if (!nameIsValid) {
             validationErrors.add(TypeOfValidationError.INVALID_NAME);
         }
