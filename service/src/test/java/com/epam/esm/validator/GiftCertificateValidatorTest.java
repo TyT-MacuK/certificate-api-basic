@@ -1,7 +1,5 @@
 package com.epam.esm.validator;
 
-//import static com.epam.esm.exception.TypeOfValidationError.INVALID_NAME;
-
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.exception.TypeOfValidationError;
 import org.junit.jupiter.api.AfterAll;

@@ -1,3 +1,4 @@
+DELETE DROM certificate.gift_certificate;
 INSERT INTO certificate.gift_certificate (name, description, price, duration, create_date, last_update_date)
 VALUES ('photosession', 'beautiful photos on memory', 10.5, 5, '2021-12-01 12:00:00', '2021-12-01 12:00:00');
 

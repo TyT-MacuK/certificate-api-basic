@@ -66,12 +66,12 @@ class TagDaoImplTest {
         assertEquals(expectedTag, optionalActual.get());
     }
 
-//    @Test//TODO
-//    void findByPartOfNameTest() {
-//        List<Tag> tagList = tagDao.findByPartOfName("oo");
-//        List<Tag> expected = Arrays.asList(expectedTag);
-//        assertEquals(expected, tagList);
-//    }
+    @Test
+    void findByPartOfNameTest() {
+        List<Tag> tagList = tagDao.findByPartOfName("oo");
+        List<Tag> expected = Arrays.asList(expectedTag);
+        assertEquals(expected, tagList);
+    }
 
     @Test
     void deleteTest() {

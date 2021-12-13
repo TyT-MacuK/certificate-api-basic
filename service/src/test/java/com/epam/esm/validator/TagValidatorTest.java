@@ -25,7 +25,7 @@ class TagValidatorTest {
 
     @ParameterizedTest
     @MethodSource("provideTagParams")
-    void validateNameTest(String name, List<TypeNotPresentException> expected) {
+    void validateNameTest(String name, List<TypeOfValidationError> expected) {
         List<TypeOfValidationError> actual = validator.validateName(name);
         assertEquals(expected, actual);
     }

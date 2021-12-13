@@ -66,12 +66,12 @@ class GiftCertificateDaoImplTest {
         assertEquals(expectedList, actual);
     }
 
-//    @Test//TODO
-//    void findByPartOfNameTest() {
-//        List<GiftCertificate> actual = certificateDao.findByPartOfName("hotosession");
-//        List<GiftCertificate> expected = List.of(expectedCertificate);
-//        assertEquals(expected, actual);
-//    }
+    @Test
+    void findByPartOfNameTest() {
+        List<GiftCertificate> actual = certificateDao.findByPartOfName("hotosession");
+        List<GiftCertificate> expected = List.of(expectedCertificate);
+        assertEquals(expected, actual);
+    }
 
     @Test
     void sortCertificateTest() {
@@ -91,17 +91,17 @@ class GiftCertificateDaoImplTest {
         assertTrue(actual);
     }
 
-//    @Test//TODO
-//    void detachAllTagsTest() {
-//        boolean actual = certificateDao.detachAllTags(3L);
-//        assertTrue(actual);
-//    }
-//
-//    @Test//TODO
-//    void attach() {
-//        boolean actual = certificateDao.attach(1L, 3L);
-//        assertTrue(actual);
-//    }
+    @Test
+    void detachAllTagsTest() {
+        boolean actual = certificateDao.detachAllTags(3L);
+        assertTrue(actual);
+    }
+
+    @Test
+    void attach() {
+        boolean actual = certificateDao.attach(1L, 3L);
+        assertTrue(actual);
+    }
 
     @AfterAll
     static void tierDown() {
