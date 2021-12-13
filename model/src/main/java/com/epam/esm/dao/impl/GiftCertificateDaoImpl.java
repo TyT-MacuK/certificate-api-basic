@@ -17,6 +17,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.core.env.AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME;
+
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final Logger logger = LogManager.getLogger();
@@ -61,11 +63,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             """;
     private static final String SQL_DELETE_GIFT_CERTIFICATE = "DELETE FROM gift_certificate WHERE id = :id";
     private static final String SQL_DELETE_RELATION_GIFT_CERTIFICATE_WITH_TAGS = """
-            DELETE FROM gift_certificate_has_tag WHERE gift_certificate_id = :id
+            DELETE FROM gift_certificate_has_tag WHERE gift_certificate_id = :gift_certificate_id
             """;
     private static final String SQL_MAKE_RELATION_BETWEEN_GIFT_CERTIFICATE_AND_TAG = """
             INSERT INTO gift_certificate_has_tag (gift_certificate_id, tag_id)
-            VALUE (:gift_certificate_id, :tag_id)
+            VALUES (:gift_certificate_id, :tag_id)
             """;
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -75,6 +77,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Autowired
     public GiftCertificateDaoImpl(NamedParameterJdbcTemplate namedJdbcTemplate, GiftCertificateMapper certificateMapper,
                                   TagMapper tagMapper) {
+        System.setProperty(ACTIVE_PROFILES_PROPERTY_NAME, "development");
         this.jdbcTemplate = namedJdbcTemplate;
         this.certificateMapper = certificateMapper;
         this.tagMapper = tagMapper;

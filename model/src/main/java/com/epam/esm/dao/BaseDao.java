@@ -14,7 +14,7 @@ import java.util.Optional;
  */
 public interface BaseDao<K, N, T extends AbstractEntity> {
     /**
-     * Add boolean.
+     * Add entity.
      *
      * @param t the entity
      * @return the boolean
@@ -22,7 +22,7 @@ public interface BaseDao<K, N, T extends AbstractEntity> {
     boolean add(T t);
 
     /**
-     * Find by id optional.
+     * Find by id.
      *
      * @param id the id
      * @return the optional
@@ -30,7 +30,7 @@ public interface BaseDao<K, N, T extends AbstractEntity> {
     Optional<T> findById(K id);
 
     /**
-     * Find by part of name list.
+     * Find by part of name.
      *
      * @param partOfName the part of name
      * @return the list
@@ -38,9 +38,9 @@ public interface BaseDao<K, N, T extends AbstractEntity> {
     List<T> findByPartOfName(N partOfName);
 
     /**
-     * Delete boolean.
+     * Delete object.
      *
-     * @param id the key
+     * @param id the entity id
      * @return the boolean
      */
     boolean delete(K id);

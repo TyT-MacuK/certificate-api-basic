@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * The Gift certificate validator.
+ */
 @Component
 public class GiftCertificateValidator {
     private static final Logger logger = LogManager.getLogger();
@@ -22,6 +25,12 @@ public class GiftCertificateValidator {
     private static final String ASCENDING = "ASC";
     private static final String DESCENDING = "DESC";
 
+    /**
+     * Is gift certificate valid.
+     *
+     * @param giftCertificateDto the gift certificate dto
+     * @return the list
+     */
     public List<TypeOfValidationError> isGiftCertificateValid(GiftCertificateDto giftCertificateDto) {
         logger.log(Level.DEBUG, "method isGiftCertificateValid()");
         List<TypeOfValidationError> validationErrors = new ArrayList<>();
@@ -40,8 +49,14 @@ public class GiftCertificateValidator {
         return validationErrors;
     }
 
+    /**
+     * Is type sort order valid.
+     *
+     * @param sortOrder the sort order
+     * @return the boolean
+     */
     public boolean isSortOrderValid(String sortOrder) {
-        return sortOrder != null && ASCENDING.equalsIgnoreCase(sortOrder) || DESCENDING.equalsIgnoreCase(sortOrder);
+        return ASCENDING.equalsIgnoreCase(sortOrder) || DESCENDING.equalsIgnoreCase(sortOrder);
     }
 
     private boolean isNameValid(String name) {
