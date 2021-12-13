@@ -10,11 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * The Tag validator.
+ */
 @Component
 public class TagValidator {
     private static final Logger logger = LogManager.getLogger();
     private static final String NAME_REGEX = "[a-zA-Z]{1,30}";
 
+    /**
+     * Validate tag name.
+     *
+     * @param tagName the tag name
+     * @return the list
+     */
     public List<TypeOfValidationError> validateName(String tagName) {
         logger.log(Level.DEBUG, "method validateName()");
         List<TypeOfValidationError> validationErrors = new ArrayList<>();
