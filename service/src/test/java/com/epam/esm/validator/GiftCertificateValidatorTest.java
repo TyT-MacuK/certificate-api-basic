@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.epam.esm.exception.TypeOfValidationError.*;
+import static com.epam.esm.exception.TypeOfValidationError.INVALID_DESCRIPTION;
+import static com.epam.esm.exception.TypeOfValidationError.INVALID_DURATION;
+import static com.epam.esm.exception.TypeOfValidationError.INVALID_NAME;
+import static com.epam.esm.exception.TypeOfValidationError.INVALID_PRICE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GiftCertificateValidatorTest {
@@ -33,31 +36,31 @@ class GiftCertificateValidatorTest {
 
     static List<Arguments> provideGiftCertificateParams() {
         List<Arguments> testCases = new ArrayList<>();
-        testCases.add(Arguments.of(new GiftCertificateDto.Builder()
-                .setName("test")
-                .setDescription("test test")
-                .setPrice(new BigDecimal(1))
-                .setDuration(5).build(), Collections.emptyList()));
-        testCases.add(Arguments.of(new GiftCertificateDto.Builder()
-                .setName(null)
-                .setDescription("test test")
-                .setPrice(new BigDecimal(1))
-                .setDuration(5).build(), Collections.singletonList(INVALID_NAME)));
-        testCases.add(Arguments.of(new GiftCertificateDto.Builder()
-                .setName("test")
-                .setDescription(null)
-                .setPrice(new BigDecimal(1))
-                .setDuration(5).build(), Collections.singletonList(INVALID_DESCRIPTION)));
-        testCases.add(Arguments.of(new GiftCertificateDto.Builder()
-                .setName("test")
-                .setDescription("test test")
-                .setPrice(new BigDecimal(-1))
-                .setDuration(5).build(), Collections.singletonList(INVALID_PRICE)));
-        testCases.add(Arguments.of(new GiftCertificateDto.Builder()
-                .setName("test")
-                .setDescription("test test")
-                .setPrice(new BigDecimal(1))
-                .setDuration(-5).build(), Collections.singletonList(INVALID_DURATION)));
+        testCases.add(Arguments.of(GiftCertificateDto.builder()
+                .name("test")
+                .description("test test")
+                .price(new BigDecimal(1))
+                .duration(5).build(), Collections.emptyList()));
+        testCases.add(Arguments.of(GiftCertificateDto.builder()
+                .name(null)
+                .description("test test")
+                .price(new BigDecimal(1))
+                .duration(5).build(), Collections.singletonList(INVALID_NAME)));
+        testCases.add(Arguments.of(GiftCertificateDto.builder()
+                .name("test")
+                .description(null)
+                .price(new BigDecimal(1))
+                .duration(5).build(), Collections.singletonList(INVALID_DESCRIPTION)));
+        testCases.add(Arguments.of(GiftCertificateDto.builder()
+                .name("test")
+                .description("test test")
+                .price(new BigDecimal(-1))
+                .duration(5).build(), Collections.singletonList(INVALID_PRICE)));
+        testCases.add(Arguments.of(GiftCertificateDto.builder()
+                .name("test")
+                .description("test test")
+                .price(new BigDecimal(1))
+                .duration(-5).build(), Collections.singletonList(INVALID_DURATION)));
         return testCases;
     }
 

@@ -24,14 +24,14 @@ public class GiftCertificateMapper implements RowMapper<GiftCertificate> {
     @Override
     public GiftCertificate mapRow(ResultSet rs, int rowNum) throws SQLException {
         logger.log(Level.DEBUG, "method mapRow()");
-        return new GiftCertificate.Builder()
-                .setId(rs.getLong(ID))
-                .setName(rs.getString(NAME))
-                .setDescription(rs.getString(DESCRIPTION))
-                .setPrice(rs.getBigDecimal(PRICE))
-                .setDuration(rs.getInt(DURATION))
-                .setCreateDate(rs.getTimestamp(CREATE_DATE).toLocalDateTime())
-                .setLastUpdateDate(rs.getTimestamp(LAST_UPDATE_DATE).toLocalDateTime())
+        return GiftCertificate.builder()
+                .id(rs.getLong(ID))
+                .name(rs.getString(NAME))
+                .description(rs.getString(DESCRIPTION))
+                .price(rs.getBigDecimal(PRICE))
+                .duration(rs.getInt(DURATION))
+                .createDay(rs.getTimestamp(CREATE_DATE).toLocalDateTime())
+                .lastUpdateDay(rs.getTimestamp(LAST_UPDATE_DATE).toLocalDateTime())
                 .build();
     }
 }

@@ -1,17 +1,26 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.dto.GiftCertificateSearchParamsDto;
 import com.epam.esm.dto.TagDto;
+import com.epam.esm.exception.AttachException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InvalidEntityDataException;
-import com.epam.esm.exception.InvalidSortOderNameException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The interface Gift certificate service.
  */
-public interface GiftCertificateService extends BaseService <Long, String, GiftCertificateDto> {
+public interface GiftCertificateService extends BaseService <Long, GiftCertificateDto> {
+
+    /**
+     * Find all gift certificates with tags.
+     *
+     * @return the map
+     */
+    Map<GiftCertificateDto, List<TagDto>> findByParams(GiftCertificateSearchParamsDto searchParams) throws InvalidEntityDataException;
 
     /**
      * Find all attach tags to certificate.
@@ -21,15 +30,6 @@ public interface GiftCertificateService extends BaseService <Long, String, GiftC
      * @throws EntityNotFoundException the entity not found exception
      */
     List<TagDto> findCertificateTags(Long giftCertificateId) throws EntityNotFoundException;
-
-    /**
-     * Find all certificates.
-     *
-     * @param sortOrder the sort order
-     * @return the list
-     * @throws InvalidSortOderNameException the invalid sort oder name exception
-     */
-    List<GiftCertificateDto> sortCertificate(String sortOrder) throws InvalidSortOderNameException;
 
     /**
      * Update gift certificate.
@@ -47,7 +47,7 @@ public interface GiftCertificateService extends BaseService <Long, String, GiftC
      * @param giftCertificateId the gift certificate id
      * @param tagId             the tag id
      * @return the boolean
-     * @throws EntityNotFoundException the entity not found exception
+     * @throws AttachException the entities can not attach
      */
-    boolean attach(Long giftCertificateId, Long tagId) throws EntityNotFoundException;
+    boolean attach(Long giftCertificateId, Long tagId) throws AttachException;
 }

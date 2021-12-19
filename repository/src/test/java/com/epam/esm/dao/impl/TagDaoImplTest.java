@@ -6,6 +6,7 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.resolver.TestProfileResolver;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,14 +42,14 @@ class TagDaoImplTest {
         expectedTag.setId(1);
         expectedTag.setName("food");
 
-        GiftCertificate expectedCertificate = new GiftCertificate.Builder()
-                .setId(2)
-                .setName("spa")
-                .setDescription("relax")
-                .setPrice(new BigDecimal(40))
-                .setDuration(30)
-                .setLastUpdateDate(LocalDateTime.of(2021, 01, 10, 14, 00, 00))
-                .setCreateDate(LocalDateTime.of(2021, 01, 10, 14, 00, 00))
+        GiftCertificate expectedCertificate = GiftCertificate.builder()
+                .id(2)
+                .name("spa")
+                .description("relax")
+                .price(new BigDecimal(40))
+                .duration(30)
+                .lastUpdateDay(LocalDateTime.of(2021, 01, 10, 14, 00, 00))
+                .createDay(LocalDateTime.of(2021, 01, 10, 14, 00, 00))
                 .build();
         expectedList = new ArrayList<>();
         expectedList.add(expectedCertificate);
@@ -63,7 +64,7 @@ class TagDaoImplTest {
     @Test
     void findByIdTest() {
         Optional<Tag> optionalActual = tagDao.findById(1L);
-        assertEquals(expectedTag, optionalActual.get());
+        Assertions.assertEquals(expectedTag, optionalActual.get());
     }
 
     @Test
@@ -82,7 +83,7 @@ class TagDaoImplTest {
     @Test
     void findByNameTest() {
         Optional<Tag> optionalActual = tagDao.findByName("food");
-        assertEquals(expectedTag, optionalActual.get());
+        Assertions.assertEquals(expectedTag, optionalActual.get());
     }
 
     @Test

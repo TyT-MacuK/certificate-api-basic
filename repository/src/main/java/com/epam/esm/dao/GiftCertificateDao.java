@@ -8,7 +8,10 @@ import java.util.List;
 /**
  * The interface Gift certificate dao.
  */
-public interface GiftCertificateDao extends BaseDao <Long, String, GiftCertificate> {
+public interface GiftCertificateDao extends BaseDao <Long, GiftCertificate> {
+
+    List<GiftCertificate> findByParams(String tagName, String certificateName, String certificateDescription,
+                                  String orderByName, String orderByCreateDate);
 
     /**
      * Find all attach tags to certificate.
@@ -17,14 +20,6 @@ public interface GiftCertificateDao extends BaseDao <Long, String, GiftCertifica
      * @return the list
      */
     List<Tag> findCertificateTags(Long giftCertificateId);
-
-    /**
-     * Find all certificates.
-     *
-     * @param sortOrder the type of sort order
-     * @return the list GiftCertificate
-     */
-    List<GiftCertificate> sortCertificate(String sortOrder);
 
     /**
      * Update giftCertificate.

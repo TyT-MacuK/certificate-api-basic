@@ -2,4 +2,5 @@ rootProject.name = 'certificate-api-basic'
 include 'model'
 include 'service'
 include 'web'
+include 'repository'
 

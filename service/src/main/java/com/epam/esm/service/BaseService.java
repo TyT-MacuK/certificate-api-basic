@@ -11,10 +11,9 @@ import java.util.List;
  * The interface Base service.
  *
  * @param <K> the key type
- * @param <N> the name type
  * @param <T> the generic type
  */
-public interface BaseService<K, N, T extends AbstractDto> {
+public interface BaseService<K, T extends AbstractDto> {
     /**
      * Add entity.
      *
@@ -33,14 +32,6 @@ public interface BaseService<K, N, T extends AbstractDto> {
      * @throws EntityNotFoundException the entity not found exception
      */
     T findById(K id) throws EntityNotFoundException;
-
-    /**
-     * Find by part of name list.
-     *
-     * @param partOfName the part of name
-     * @return the list
-     */
-    List<T> findByPartOfName(N partOfName);
 
     /**
      * Delete boolean.
