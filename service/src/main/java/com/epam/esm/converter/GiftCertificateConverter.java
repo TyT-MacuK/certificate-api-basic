@@ -16,14 +16,14 @@ public class GiftCertificateConverter {
      * @return the gift certificate
      */
     public GiftCertificate convertToEntity(GiftCertificateDto dto) {
-        return new GiftCertificate.Builder()
-                .setId(dto.getId())
-                .setName(dto.getName())
-                .setDescription(dto.getDescription())
-                .setPrice(dto.getPrice())
-                .setDuration(dto.getDuration())
-                .setCreateDate(dto.getCreateDay())
-                .setLastUpdateDate(dto.getLastUpdateDay())
+        return GiftCertificate.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .price(dto.getPrice())
+                .duration(dto.getDuration())
+                .createDay(dto.getCreateDay())
+                .lastUpdateDay(dto.getLastUpdateDay())
                 .build();
     }
 
@@ -34,14 +34,14 @@ public class GiftCertificateConverter {
      * @return the gift certificate dto
      */
     public GiftCertificateDto convertToDto(GiftCertificate certificate) {
-        return new GiftCertificateDto.Builder()
-                .setId(certificate.getId())
-                .setName(certificate.getName())
-                .setDescription(certificate.getDescription())
-                .setPrice(certificate.getPrice())
-                .setDuration(certificate.getDuration())
-                .setCreateDate(certificate.getCreateDay())
-                .setLastUpdateDate(certificate.getLastUpdateDay())
+        return GiftCertificateDto.builder()
+                .id(certificate.getId())
+                .name(certificate.getName())
+                .description(certificate.getDescription())
+                .price(certificate.getPrice())
+                .duration(certificate.getDuration())
+                .createDay(certificate.getCreateDay())
+                .lastUpdateDay(certificate.getLastUpdateDay())
                 .build();
     }
 }

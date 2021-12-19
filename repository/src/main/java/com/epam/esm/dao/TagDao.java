@@ -9,7 +9,22 @@ import java.util.Optional;
 /**
  * The interface Tag dao.
  */
-public interface TagDao extends BaseDao<Long, String, Tag> {
+public interface TagDao extends BaseDao<Long, Tag> {
+
+    /**
+     * Find all tags.
+     *
+     * @return the list
+     */
+    List<Tag> findAll();
+
+    /**
+     * Find by part of name.
+     *
+     * @param partOfName the part of name
+     * @return the list
+     */
+    List<Tag> findByPartOfName(String partOfName);
 
     /**
      * Find by name.

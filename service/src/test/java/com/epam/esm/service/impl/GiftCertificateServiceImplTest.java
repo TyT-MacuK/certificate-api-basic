@@ -8,9 +8,9 @@ import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.AttachException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InvalidEntityDataException;
-import com.epam.esm.exception.InvalidSortOderNameException;
 import com.epam.esm.validator.GiftCertificateValidator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -77,28 +77,11 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void findByPartOfNameTest() {
-        when(certificateDao.findByPartOfName("es")).thenReturn(List.of(certificate));
-        when(certificateConverter.convertToDto(certificate)).thenReturn(certificateDto);
-        List<GiftCertificateDto> actual = service.findByPartOfName("es");
-        assertEquals(List.of(certificateDto), actual);
-    }
-
-    @Test
-    void findCertificateTagsTest() throws EntityNotFoundException {
+    void findCertificateTagsTest() {
         when(certificateDao.findCertificateTags(1L)).thenReturn(List.of(tag));
         when(tagConverter.convertToDto(tag)).thenReturn(tagDto);
         List<TagDto> actual = service.findCertificateTags(1L);
         assertEquals(List.of(tagDto), actual);
-    }
-
-    @Test
-    void sortCertificateTest() throws InvalidSortOderNameException {
-        when(validator.isSortOrderValid("ASC")).thenReturn(true);
-        when(certificateDao.sortCertificate("ASC")).thenReturn(List.of(certificate));
-        when(certificateConverter.convertToDto(certificate)).thenReturn(certificateDto);
-        List<GiftCertificateDto> actual = service.sortCertificate("ASC");
-        assertEquals(List.of(certificateDto), actual);
     }
 
     @Test
@@ -111,7 +94,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void attachTest() throws EntityNotFoundException {
+    void attachTest() throws AttachException {
         when(certificateDao.findById(1L)).thenReturn(Optional.of(certificate));
         when(tagDao.findById(1L)).thenReturn(Optional.of(tag));
         when(certificateDao.attach(1L, 1L)).thenReturn(true);
@@ -128,26 +111,26 @@ class GiftCertificateServiceImplTest {
     }
 
     private static void initializeGiftCertificateDto() {
-        certificateDto = new GiftCertificateDto.Builder()
-                .setId(1)
-                .setName("test")
-                .setDescription("test test")
-                .setPrice(new BigDecimal(10))
-                .setDuration(5)
-                .setLastUpdateDate(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
-                .setCreateDate(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
+        certificateDto = GiftCertificateDto.builder()
+                .id(1)
+                .name("test")
+                .description("test test")
+                .price(new BigDecimal(10))
+                .duration(5)
+                .lastUpdateDay(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
+                .createDay(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
                 .build();
     }
 
     private static void initializeGiftCertificate() {
-        certificate = new GiftCertificate.Builder()
-                .setId(1)
-                .setName("test")
-                .setDescription("test test")
-                .setPrice(new BigDecimal(10))
-                .setDuration(5)
-                .setLastUpdateDate(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
-                .setCreateDate(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
+        certificate = GiftCertificate.builder()
+                .id(1)
+                .name("test")
+                .description("test test")
+                .price(new BigDecimal(10))
+                .duration(5)
+                .lastUpdateDay(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
+                .createDay(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
                 .build();
     }
 }

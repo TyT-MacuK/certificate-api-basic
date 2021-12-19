@@ -1,17 +1,37 @@
 package com.epam.esm.handler;
 
-import com.epam.esm.exception.*;
+
+import com.epam.esm.exception.AttachException;
+import com.epam.esm.exception.EntityAlreadyExistsException;
+import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.exception.InvalidEntityDataException;
+import com.epam.esm.exception.TypeOfValidationError;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.I_AM_A_TEAPOT;
+import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String ENTITY_ALREADY_EXISTS_MESSAGE = "entity_already_exists";
     private static final String ENTITY_NOT_FOUND_MESSAGE = "entity_not_found";
@@ -20,35 +40,60 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
     private static final String INVALID_DESCRIPTION_MESSAGE = "invalid_entity.description";
     private static final String INVALID_PRICE_MESSAGE = "invalid_entity.price";
     private static final String INVALID_DURATION_MESSAGE = "invalid_entity.duration";
-    private static final String INVALID_SORT_ORDER_NAME = "invalid_sort_order_name";
+    private static final String INVALID_TAG_NAME_MESSAGE = "invalid_entity.tag_name";
+    private static final String INVALID_CERTIFICATE_NAME_MESSAGE = "invalid_entity.certificate_name";
+    private static final String INVALID_ORDER_BY_NAME_PARAM_MESSAGE = "invalid_entity.order_by_name_param";
+    private static final String INVALID_ORDER_BY_CREATE_DAY_PARAM_MESSAGE = "invalid_entity.order_by_create_date_param";
+    private static final String ATTACH_EXCEPTION = "attach_exception";
+    private static final String METHOD_NOT_ALLOWED_MESSAGE = "method_not_allowed";
+    private static final String BAD_REQUEST = "bad_request";
     private static final String UNFORESEEN_EXCEPTION = "unforeseen_exception";
 
-    private static final int ENTITY_ALREADY_EXISTS_CODE = 40901;
+    private static final int BAD_REQUEST_CODE = 40000;
+    private static final int INVALID_ENTITY_CODE = 40001;
     private static final int ENTITY_NOT_FOUND_CODE = 40401;
-    private static final int SORT_NAME_NOT_FOUND_CODE = 40001;
-    private static final int INVALID_ENTITY_CODE = 40002;
+    private static final int METHOD_NOT_ALLOWED_CODE = 40501;
+    private static final int ENTITY_ALREADY_EXISTS_CODE = 40901;
     private static final int WRONG_WORK_CODE = 41801;
 
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String ENTITY_ERRORS = "entityErrors";
     private static final String ERROR_CODE = "errorCode";
 
+    private static final String LOCALE_REQUEST_PARAMETER = "loc";
+
     private final ResourceBundleMessageSource messageSource;
 
-    public ApplicationExceptionHandler(ResourceBundleMessageSource messageSource) {
-        this.messageSource = messageSource;
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String locale = request.getParameter(LOCALE_REQUEST_PARAMETER);
+        if (locale != null) {
+            LocaleContextHolder.setLocale(new Locale(locale));
+        }
+        String message = getLocalizedErrorMessage(BAD_REQUEST);
+        return buildErrorResponseEntity(message, BAD_REQUEST_CODE, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String locale = request.getParameter(LOCALE_REQUEST_PARAMETER);
+        if (locale != null) {
+            LocaleContextHolder.setLocale(new Locale(locale));
+        }
+        String message = getLocalizedErrorMessage(METHOD_NOT_ALLOWED_MESSAGE);
+        return buildErrorResponseEntity(message, METHOD_NOT_ALLOWED_CODE, METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
     public ResponseEntity<Object> handlerEntityAlreadyExist() {
         String message = getLocalizedErrorMessage(ENTITY_ALREADY_EXISTS_MESSAGE);
-        return buildErrorResponseEntity(message, ENTITY_ALREADY_EXISTS_CODE, HttpStatus.CONFLICT);
+        return buildErrorResponseEntity(message, ENTITY_ALREADY_EXISTS_CODE, CONFLICT);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Object> handlerEntityNotFound(EntityNotFoundException e) {
+    public ResponseEntity<Object> handlerEntityNotFound() {
         String message = getLocalizedErrorMessage(ENTITY_NOT_FOUND_MESSAGE);
-        return buildErrorResponseEntity(message, ENTITY_NOT_FOUND_CODE, HttpStatus.NOT_FOUND);
+        return buildErrorResponseEntity(message, ENTITY_NOT_FOUND_CODE, NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidEntityDataException.class)
@@ -62,6 +107,10 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
                         case INVALID_DESCRIPTION -> getLocalizedErrorMessage(INVALID_DESCRIPTION_MESSAGE);
                         case INVALID_PRICE -> getLocalizedErrorMessage(INVALID_PRICE_MESSAGE);
                         case INVALID_DURATION -> getLocalizedErrorMessage(INVALID_DURATION_MESSAGE);
+                        case INVALID_TAG_NAME -> getLocalizedErrorMessage(INVALID_TAG_NAME_MESSAGE);
+                        case INVALID_CERTIFICATE_NAME -> getLocalizedErrorMessage(INVALID_CERTIFICATE_NAME_MESSAGE);
+                        case INVALID_ORDER_BY_NAME_PARAM -> getLocalizedErrorMessage(INVALID_ORDER_BY_NAME_PARAM_MESSAGE);
+                        case INVALID_ORDER_BY_CREATE_DAY_PARAM -> getLocalizedErrorMessage(INVALID_ORDER_BY_CREATE_DAY_PARAM_MESSAGE);
                     }
             );
         }
@@ -74,16 +123,19 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(InvalidSortOderNameException.class)
-    public ResponseEntity<Object> handlerInvalidSortOderName() {
-        String message = getLocalizedErrorMessage(INVALID_SORT_ORDER_NAME);
-        return buildErrorResponseEntity(message, SORT_NAME_NOT_FOUND_CODE, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(AttachException.class)
+    public ResponseEntity<Object> handlerAttachException(AttachException e) {
+        String message = getLocalizedErrorMessage(ATTACH_EXCEPTION);
+        for (Class<?> entity : e.getNotFoundEntityList()) {
+            message = message.concat(entity.getSimpleName()).concat(" ");
+        }
+        return buildErrorResponseEntity(message, ENTITY_NOT_FOUND_CODE, NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handlerUnforeseenException() {
+    public ResponseEntity<Object> handlerUnforeseenException(Exception e) {
         String message = getLocalizedErrorMessage(UNFORESEEN_EXCEPTION);
-        return buildErrorResponseEntity(message, WRONG_WORK_CODE, HttpStatus.I_AM_A_TEAPOT);
+        return buildErrorResponseEntity(message + " " + e.getMessage(), WRONG_WORK_CODE, I_AM_A_TEAPOT);
     }
 
     private String getLocalizedErrorMessage(String message) {
