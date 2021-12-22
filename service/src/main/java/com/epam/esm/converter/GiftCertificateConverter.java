@@ -2,13 +2,16 @@ package com.epam.esm.converter;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
  * The type Gift certificate converter.
  */
 @Component
+@RequiredArgsConstructor
 public class GiftCertificateConverter {
+    private final TagConverter tagConverter;
     /**
      * Convert to gift certificate.
      *
@@ -22,8 +25,9 @@ public class GiftCertificateConverter {
                 .description(dto.getDescription())
                 .price(dto.getPrice())
                 .duration(dto.getDuration())
-                .createDay(dto.getCreateDay())
-                .lastUpdateDay(dto.getLastUpdateDay())
+                .createDate(dto.getCreateDay())
+                .lastUpdateDate(dto.getLastUpdateDay())
+                .tags(dto.getTags().stream().map(tagConverter::convertToEntity).toList())
                 .build();
     }
 
@@ -40,8 +44,9 @@ public class GiftCertificateConverter {
                 .description(certificate.getDescription())
                 .price(certificate.getPrice())
                 .duration(certificate.getDuration())
-                .createDay(certificate.getCreateDay())
-                .lastUpdateDay(certificate.getLastUpdateDay())
+                .createDay(certificate.getCreateDate())
+                .lastUpdateDay(certificate.getLastUpdateDate())
+                .tags(certificate.getTags().stream().map(tagConverter::convertToDto).toList())
                 .build();
     }
 }

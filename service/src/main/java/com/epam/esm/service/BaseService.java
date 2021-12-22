@@ -18,11 +18,10 @@ public interface BaseService<K, T extends AbstractDto> {
      * Add entity.
      *
      * @param t the entity
-     * @return the boolean
      * @throws InvalidEntityDataException   the invalid entity data exception
      * @throws EntityAlreadyExistsException the entity already exists exception
      */
-    boolean add(T t) throws InvalidEntityDataException, EntityAlreadyExistsException;
+    void add(T t) throws InvalidEntityDataException, EntityAlreadyExistsException;
 
     /**
      * Find entity by id.
@@ -37,8 +36,7 @@ public interface BaseService<K, T extends AbstractDto> {
      * Delete boolean.
      *
      * @param id the id
-     * @return the boolean
      * @throws EntityNotFoundException the entity not found exception
      */
-    boolean delete(K id) throws EntityNotFoundException;
+    void delete(K id) throws EntityNotFoundException;
 }

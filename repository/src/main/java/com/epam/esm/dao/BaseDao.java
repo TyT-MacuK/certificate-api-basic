@@ -17,7 +17,7 @@ public interface BaseDao<K, T extends AbstractEntity> {
      * @param t the entity
      * @return the boolean
      */
-    boolean add(T t);
+    void add(T t);
 
     /**
      * Find by id.
@@ -27,11 +27,11 @@ public interface BaseDao<K, T extends AbstractEntity> {
      */
     Optional<T> findById(K id);
 
+
     /**
-     * Delete object.
+     * Delete entity.
      *
-     * @param id the entity id
-     * @return the boolean
+     * @param t the entity
      */
-    boolean delete(K id);
+    void delete(T t);
 }

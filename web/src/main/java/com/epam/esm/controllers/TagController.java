@@ -1,6 +1,5 @@
 package com.epam.esm.controllers;
 
-import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.exception.EntityAlreadyExistsException;
 import com.epam.esm.exception.EntityNotFoundException;
@@ -38,8 +37,8 @@ public class TagController {
             throws InvalidEntityDataException, EntityAlreadyExistsException {
         log.log(Level.DEBUG, "method addTagDto()");
         setLocale(locale);
-        boolean result = service.add(tagDto);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+        service.add(tagDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -56,30 +55,14 @@ public class TagController {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/name/{partOfTagName}")
-    public ResponseEntity<List<TagDto>> findByPartOfTagName(@PathVariable String partOfTagName,
-                                                            @RequestParam(value = "loc", required = false) String locale) {
-        log.log(Level.DEBUG, "method findByPartOfTagName()");
-        setLocale(locale);
-        return new ResponseEntity<>(service.findByPartOfName(partOfTagName), HttpStatus.OK);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") long id,
                                           @RequestParam(value = "loc", required = false) String locale)
             throws EntityNotFoundException {
         log.log(Level.DEBUG, "method delete()");
         setLocale(locale);
-        return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
-    }
-
-    @GetMapping("/certificates/{id}")
-    public ResponseEntity<List<GiftCertificateDto>> findTagCertificates(@PathVariable long id,
-                                                                        @RequestParam(value = "loc", required = false) String locale)
-            throws EntityNotFoundException {
-        log.log(Level.DEBUG, "method findTagCertificates()");
-        setLocale(locale);
-        return new ResponseEntity<>(service.findTagCertificates(id), HttpStatus.OK);
+        service.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private void setLocale(String locale) {

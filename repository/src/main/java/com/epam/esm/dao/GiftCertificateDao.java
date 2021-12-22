@@ -10,39 +10,14 @@ import java.util.List;
  */
 public interface GiftCertificateDao extends BaseDao <Long, GiftCertificate> {
 
-    List<GiftCertificate> findByParams(String tagName, String certificateName, String certificateDescription,
+    List<GiftCertificate> findByParams(List<String> tagNames, String certificateName, String certificateDescription,
                                   String orderByName, String orderByCreateDate);
-
-    /**
-     * Find all attach tags to certificate.
-     *
-     * @param giftCertificateId the gift certificate id
-     * @return the list
-     */
-    List<Tag> findCertificateTags(Long giftCertificateId);
 
     /**
      * Update giftCertificate.
      *
      * @param certificate the certificate
-     * @return the boolean
+     * @return the GiftCertificate
      */
-    boolean update(GiftCertificate certificate);
-
-    /**
-     * Detach all tags.
-     *
-     * @param giftCertificateId the gift certificate id
-     * @return the boolean
-     */
-    boolean detachAllTags(Long giftCertificateId);
-
-    /**
-     * Attach tag and gift certificate.
-     *
-     * @param giftCertificateId the gift certificate id
-     * @param tagId             the tag id
-     * @return the boolean
-     */
-    boolean attach(Long giftCertificateId, Long tagId);
+    GiftCertificate update(GiftCertificate certificate);
 }

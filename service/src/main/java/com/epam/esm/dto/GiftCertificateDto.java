@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -31,4 +32,5 @@ public class GiftCertificateDto extends AbstractDto {
             pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
             timezone = "UTC")
     private LocalDateTime lastUpdateDay;
+    private List<TagDto> tags;
 }

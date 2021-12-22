@@ -15,38 +15,35 @@ import com.epam.esm.exception.InvalidEntityDataException;
 import com.epam.esm.exception.TypeOfValidationError;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.validator.GiftCertificateValidator;
+import com.epam.esm.validator.SearchParamsValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao certificateDao;
     private final GiftCertificateConverter certificateConverter;
-    private final GiftCertificateValidator validator;
-    private final TagDao tagDao;
-    private final TagConverter tagConverter;
+    private final GiftCertificateValidator certificateValidator;
+    private final SearchParamsValidator searchParamsValidator;
 
     @Override
     @Transactional
-    public boolean add(GiftCertificateDto giftCertificateDto) throws InvalidEntityDataException {
-        List<TypeOfValidationError> errors = validator.isGiftCertificateValid(giftCertificateDto);
+    public void add(GiftCertificateDto giftCertificateDto) throws InvalidEntityDataException {
+        List<TypeOfValidationError> errors = certificateValidator.isGiftCertificateValid(giftCertificateDto);
         if (!errors.isEmpty()) {
             throw new InvalidEntityDataException(errors, GiftCertificate.class);
         }
         GiftCertificate certificate = certificateConverter.convertToEntity(giftCertificateDto);
         LocalDateTime createDay = LocalDateTime.now();
-        certificate.setCreateDay(createDay);
-        certificate.setLastUpdateDay(createDay);
-        return certificateDao.add(certificate);
+        certificate.setCreateDate(createDay);
+        certificate.setLastUpdateDate(createDay);
+        certificateDao.add(certificate);
     }
 
     @Override
@@ -57,65 +54,53 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public Map<GiftCertificateDto, List<TagDto>> findByParams(GiftCertificateSearchParamsDto searchParams) throws InvalidEntityDataException {
-        List<TypeOfValidationError> errors = validator.isGiftCertificateSearchParamsDtoValid(searchParams);
+    public List<GiftCertificateDto> findByParams(GiftCertificateSearchParamsDto searchParams) throws InvalidEntityDataException {
+        List<TypeOfValidationError> errors = searchParamsValidator.isGiftCertificateSearchParamsDtoValid(searchParams);
         if (!errors.isEmpty()) {
             throw new InvalidEntityDataException(errors, GiftCertificate.class);
         }
 
-        String tagName = searchParams.getTagName();
+        List<String> tagName = searchParams.getTagNames();
         String certificateName = searchParams.getCertificateName();
         String certificateDescription = searchParams.getCertificateDescription();
         String orderByName = searchParams.getOrderByName();
         String orderByCreateDate = searchParams.getOrderByCreateDate();
 
-        List<GiftCertificateDto> allCertificate = certificateDao.findByParams(tagName, certificateName,
+        return certificateDao.findByParams(tagName, certificateName,
                         certificateDescription, orderByName, orderByCreateDate)
                 .stream().map(certificateConverter::convertToDto).toList();
-
-        Map<GiftCertificateDto, List<TagDto>> result = new HashMap<>();
-        for(GiftCertificateDto certificate : allCertificate) {
-            List <Tag> tags = certificateDao.findCertificateTags(certificate.getId());
-            result.put(certificate, tags.stream().map(tagConverter::convertToDto).toList());
-        }
-        return result;
     }
 
-    @Override
-    public List<TagDto> findCertificateTags(Long giftCertificateId) {
-        List<Tag> tags = certificateDao.findCertificateTags(giftCertificateId);
-        return tags.stream().map(tagConverter::convertToDto).toList();
-    }
 
     @Override
-    @Transactional
+    @Transactional//TODO add tag
     public boolean updateGiftCertificate(GiftCertificateDto giftCertificateDto) throws EntityNotFoundException, InvalidEntityDataException {
         List<TypeOfValidationError> errors = new ArrayList<>();
         GiftCertificate certificate = certificateDao.findById(giftCertificateDto.getId()).orElseThrow(EntityNotFoundException::new);
 
         if (giftCertificateDto.getName() != null) {
-            if (validator.isNameValid(giftCertificateDto.getName())) {
+            if (certificateValidator.isNameValid(giftCertificateDto.getName())) {
                 certificate.setName(giftCertificateDto.getName());
             } else {
                 errors.add(TypeOfValidationError.INVALID_NAME);
             }
         }
         if (giftCertificateDto.getDescription() != null) {
-            if (validator.isDescriptionValid(giftCertificateDto.getDescription())) {
+            if (certificateValidator.isDescriptionValid(giftCertificateDto.getDescription())) {
                 certificate.setDescription(giftCertificateDto.getDescription());
             } else {
                 errors.add(TypeOfValidationError.INVALID_DESCRIPTION);
             }
         }
         if (giftCertificateDto.getPrice() != null) {
-            if (validator.isPriceValid(giftCertificateDto.getPrice())) {
+            if (certificateValidator.isPriceValid(giftCertificateDto.getPrice())) {
                 certificate.setPrice(giftCertificateDto.getPrice());
             } else {
                 errors.add(TypeOfValidationError.INVALID_PRICE);
             }
         }
         if (giftCertificateDto.getDuration() != 0) {
-            if (validator.isDurationValid(giftCertificateDto.getDuration())) {
+            if (certificateValidator.isDurationValid(giftCertificateDto.getDuration())) {
                 certificate.setDuration(giftCertificateDto.getDuration());
             } else {
                 errors.add(TypeOfValidationError.INVALID_DURATION);
@@ -125,43 +110,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throw new InvalidEntityDataException(errors, GiftCertificate.class);
         }
         LocalDateTime lastUpdateDate = LocalDateTime.now();
-        certificate.setLastUpdateDay(lastUpdateDate);
-        return certificateDao.update(certificate);
+        certificate.setLastUpdateDate(lastUpdateDate);
+        certificateDao.update(certificate);
+        return false;
     }
 
     @Override
     @Transactional
-    public boolean attach(Long giftCertificateId, Long tagId) throws AttachException {
-        Optional<GiftCertificate> optionalCertificate = certificateDao.findById(giftCertificateId);
-        Optional<Tag> optionalTag = tagDao.findById(tagId);
-        List<Class<?>> notFoundEntityList = new ArrayList<>();
-        if (optionalCertificate.isEmpty() && optionalTag.isEmpty()) {
-            notFoundEntityList.add(GiftCertificate.class);
-            notFoundEntityList.add(Tag.class);
-        } else if (optionalCertificate.isEmpty()) {
-            notFoundEntityList.add(GiftCertificate.class);
-        } else if (optionalTag.isEmpty()) {
-            notFoundEntityList.add(Tag.class);
-        }
-        if (!notFoundEntityList.isEmpty()) {
-            throw new AttachException(notFoundEntityList);
-        }
-        return certificateDao.attach(giftCertificateId, tagId);
-    }
+    public void delete(Long id) throws EntityNotFoundException {
+        GiftCertificate certificate = certificateDao.findById(id).orElseThrow(EntityNotFoundException::new);
+        certificateDao.delete(certificate);
 
-
-    @Override
-    @Transactional
-    public boolean delete(Long id) throws EntityNotFoundException {
-        boolean isAllTagDetach = certificateDao.detachAllTags(id);
-        if (isAllTagDetach) {
-            boolean isDeleted = certificateDao.delete(id);
-            if (!isDeleted) {
-                throw new EntityNotFoundException();
-            }
-        } else {
-            throw new EntityNotFoundException();
-        }
-        return true;
     }
 }

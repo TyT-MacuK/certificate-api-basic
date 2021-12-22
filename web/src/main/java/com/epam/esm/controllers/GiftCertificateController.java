@@ -2,8 +2,6 @@ package com.epam.esm.controllers;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateSearchParamsDto;
-import com.epam.esm.dto.TagDto;
-import com.epam.esm.exception.AttachException;
 import com.epam.esm.exception.EntityAlreadyExistsException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InvalidEntityDataException;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/certificate", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,7 +35,8 @@ public class GiftCertificateController {
                                                          @RequestParam(value = "loc", required = false) String locale)
             throws InvalidEntityDataException, EntityAlreadyExistsException {
         setLocale(locale);
-        return new ResponseEntity<>(service.add(certificateDto), HttpStatus.CREATED);
+        service.add(certificateDto);
+        return new ResponseEntity<>( HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -51,17 +48,9 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/sort")
-    public ResponseEntity<Map<GiftCertificateDto, List<TagDto>>> findByParams(
+    public ResponseEntity<List<GiftCertificateDto>> findByParams(
             @RequestBody GiftCertificateSearchParamsDto searchParams) throws InvalidEntityDataException {
         return new ResponseEntity<>(service.findByParams(searchParams), HttpStatus.OK);
-    }
-
-    @GetMapping("/tags/{id}")
-    public ResponseEntity<List<TagDto>> findCertificateTags(@PathVariable long id,
-                                                            @RequestParam(value = "loc", required = false) String locale)
-            throws EntityNotFoundException {
-        setLocale(locale);
-        return new ResponseEntity<>(service.findCertificateTags(id), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
@@ -71,7 +60,8 @@ public class GiftCertificateController {
             throws EntityNotFoundException, InvalidEntityDataException {
         setLocale(locale);
         certificateDto.setId(id);
-        return new ResponseEntity<>(service.updateGiftCertificate(certificateDto), HttpStatus.OK);
+        service.updateGiftCertificate(certificateDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -79,16 +69,8 @@ public class GiftCertificateController {
                                                             @RequestParam(value = "loc", required = false) String locale)
             throws EntityNotFoundException {
         setLocale(locale);
-        return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
-    }
-
-    @PutMapping
-    public ResponseEntity<Boolean> attachGiftCertificateAndTag(@RequestParam("certificate_id") long certificateId,
-                                                               @RequestParam("tag_id") long tagId,
-                                                               @RequestParam(value = "loc", required = false) String locale)
-            throws AttachException {
-        setLocale(locale);
-        return new ResponseEntity<>(service.attach(certificateId, tagId), HttpStatus.CREATED);
+        service.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private void setLocale(String locale) {

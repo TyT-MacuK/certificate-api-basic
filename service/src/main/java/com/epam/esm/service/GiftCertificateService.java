@@ -20,16 +20,7 @@ public interface GiftCertificateService extends BaseService <Long, GiftCertifica
      *
      * @return the map
      */
-    Map<GiftCertificateDto, List<TagDto>> findByParams(GiftCertificateSearchParamsDto searchParams) throws InvalidEntityDataException;
-
-    /**
-     * Find all attach tags to certificate.
-     *
-     * @param giftCertificateId the gift certificate id
-     * @return the list
-     * @throws EntityNotFoundException the entity not found exception
-     */
-    List<TagDto> findCertificateTags(Long giftCertificateId) throws EntityNotFoundException;
+    List<GiftCertificateDto> findByParams(GiftCertificateSearchParamsDto searchParams) throws InvalidEntityDataException;
 
     /**
      * Update gift certificate.
@@ -40,14 +31,4 @@ public interface GiftCertificateService extends BaseService <Long, GiftCertifica
      * @throws InvalidEntityDataException the invalid entity data exception
      */
     boolean updateGiftCertificate(GiftCertificateDto certificate) throws EntityNotFoundException, InvalidEntityDataException;
-
-    /**
-     * Attach tag and gift certificate.
-     *
-     * @param giftCertificateId the gift certificate id
-     * @param tagId             the tag id
-     * @return the boolean
-     * @throws AttachException the entities can not attach
-     */
-    boolean attach(Long giftCertificateId, Long tagId) throws AttachException;
 }
