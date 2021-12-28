@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class GiftCertificateConverter {
     private final TagConverter tagConverter;
+
     /**
      * Convert to gift certificate.
      *
