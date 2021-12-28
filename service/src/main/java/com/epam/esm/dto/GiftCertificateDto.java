@@ -5,16 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GiftCertificateDto extends AbstractDto {
+@Builder
+@Relation(collectionRelation = "content", itemRelation = "giftCertificate")
+public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> {
+
     private long id;
     private String name;
     private String description;
