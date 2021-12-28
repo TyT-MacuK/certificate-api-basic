@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +84,18 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         }
         String message = getLocalizedErrorMessage(METHOD_NOT_ALLOWED_MESSAGE);
         return buildErrorResponseEntity(message, METHOD_NOT_ALLOWED_CODE, METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e) {
+        List<String> messages = new ArrayList<>();
+        for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
+            messages.add(getLocalizedErrorMessage(constraintViolation.getMessage()));
+        }
+        Map<String, Object> responseMessage = new HashMap<>();
+        responseMessage.put(ERROR_MESSAGE, messages);
+        responseMessage.put(ERROR_CODE, INVALID_ENTITY_CODE);
+        return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)

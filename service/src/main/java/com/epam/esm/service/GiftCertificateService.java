@@ -2,34 +2,56 @@ package com.epam.esm.service;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateSearchParamsDto;
-import com.epam.esm.dto.TagDto;
-import com.epam.esm.exception.AttachException;
+import com.epam.esm.exception.EntityAlreadyExistsException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InvalidEntityDataException;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The interface Gift certificate service.
  */
-public interface GiftCertificateService extends BaseService <Long, GiftCertificateDto> {
+public interface GiftCertificateService {
 
     /**
-     * Find all gift certificates with tags.
+     * Add gift certificate.
      *
-     * @return the map
+     * @param giftCertificate the gift certificate
+     * @throws InvalidEntityDataException   the invalid entity data exception
+     * @throws EntityAlreadyExistsException the entity already exists exception
      */
-    Map<GiftCertificateDto, List<TagDto>> findByParams(GiftCertificateSearchParamsDto searchParams) throws InvalidEntityDataException;
+    void add(GiftCertificateDto giftCertificate) throws InvalidEntityDataException, EntityAlreadyExistsException;
 
     /**
-     * Find all attach tags to certificate.
+     * Find by id gift certificate.
      *
-     * @param giftCertificateId the gift certificate id
-     * @return the list
+     * @param id the id
+     * @return the gift certificate dto
      * @throws EntityNotFoundException the entity not found exception
      */
-    List<TagDto> findCertificateTags(Long giftCertificateId) throws EntityNotFoundException;
+    GiftCertificateDto findById(long id) throws EntityNotFoundException;
+
+    /**
+     * Find all gift certificate.
+     *
+     * @param pageNumber the page number
+     * @param pageSize   the page size
+     * @return the list of gift certificates
+     */
+    List<GiftCertificateDto> findAll(int pageNumber, int pageSize);
+
+
+    /**
+     * Find gift certificates by params.
+     *
+     * @param searchParams the search params
+     * @param pageNumber   the page number
+     * @param pageSize     the page size
+     * @return the list
+     * @throws InvalidEntityDataException the invalid entity data exception
+     */
+    List<GiftCertificateDto> findByParams(GiftCertificateSearchParamsDto searchParams, int pageNumber, int pageSize)
+            throws InvalidEntityDataException;
 
     /**
      * Update gift certificate.
@@ -39,15 +61,13 @@ public interface GiftCertificateService extends BaseService <Long, GiftCertifica
      * @throws EntityNotFoundException    the entity not found exception
      * @throws InvalidEntityDataException the invalid entity data exception
      */
-    boolean updateGiftCertificate(GiftCertificateDto certificate) throws EntityNotFoundException, InvalidEntityDataException;
+    void updateGiftCertificate(GiftCertificateDto certificate) throws EntityNotFoundException, InvalidEntityDataException;
 
     /**
-     * Attach tag and gift certificate.
+     * Delete boolean.
      *
-     * @param giftCertificateId the gift certificate id
-     * @param tagId             the tag id
-     * @return the boolean
-     * @throws AttachException the entities can not attach
+     * @param id the id
+     * @throws EntityNotFoundException the entity not found exception
      */
-    boolean attach(Long giftCertificateId, Long tagId) throws AttachException;
+    void delete(long id) throws EntityNotFoundException;
 }

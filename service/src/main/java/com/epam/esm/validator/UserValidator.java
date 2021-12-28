@@ -9,26 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/**
- * The Tag validator.
- */
-@Component
 @Log4j2
-public class TagValidator {
+@Component
+public class UserValidator {
     private static final String NAME_REGEX = "[a-zA-Z]{1,30}";
 
     /**
      * Validate tag name.
      *
-     * @param tagName the tag name
+     * @param userName the user name
      * @return the list
      */
-    public List<TypeOfValidationError> validateName(String tagName) {
+    public List<TypeOfValidationError> validateName(String userName) {
         List<TypeOfValidationError> validationErrors = new ArrayList<>();
 
-        boolean nameIsValid = tagName != null && !tagName.isEmpty() && Pattern.matches(NAME_REGEX, tagName);
+        boolean nameIsValid = userName != null && !userName.isEmpty() && Pattern.matches(NAME_REGEX, userName);
         if (!nameIsValid) {
-            log.log(Level.WARN, "tag name {} is invalid", tagName);
+            log.log(Level.WARN, "user name {} is invalid", userName);
             validationErrors.add(TypeOfValidationError.INVALID_NAME);
         }
         return validationErrors;
