@@ -1,23 +1,26 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 
 import java.util.List;
 
 /**
  * The interface Gift certificate dao.
  */
-public interface GiftCertificateDao extends BaseDao <Long, GiftCertificate> {
-
-    List<GiftCertificate> findByParams(List<String> tagNames, String certificateName, String certificateDescription,
-                                  String orderByName, String orderByCreateDate);
+public interface GiftCertificateDao extends CrudDao<Long, GiftCertificate> {
 
     /**
-     * Update giftCertificate.
+     * Find by params.
      *
-     * @param certificate the certificate
-     * @return the GiftCertificate
+     * @param tagNames               the tag names
+     * @param certificateName        the certificate name
+     * @param certificateDescription the certificate description
+     * @param orderByName            the order by name
+     * @param orderByCreateDate      the order by create date
+     * @param pageNumber             the page number
+     * @param pageSize               the page size
+     * @return the list
      */
-    GiftCertificate update(GiftCertificate certificate);
+    List<GiftCertificate> findByParams(List<String> tagNames, String certificateName, String certificateDescription,
+                                  String orderByName, String orderByCreateDate, int pageNumber, int pageSize);
 }

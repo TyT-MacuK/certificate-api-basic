@@ -4,19 +4,15 @@ import com.epam.esm.config.TestDataBaseConfig;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.resolver.TestProfileResolver;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -25,13 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestDataBaseConfig.class)
-@ActiveProfiles(resolver = TestProfileResolver.class)
+@SpringBootTest(classes = TestDataBaseConfig.class)
 @Transactional
+@TestPropertySource(locations = "classpath:init_test_db.properties")
 class GiftCertificateDaoImplTest {
     @Autowired
     private GiftCertificateDao certificateDao;
@@ -49,6 +44,7 @@ class GiftCertificateDaoImplTest {
                 .duration(5)
                 .lastUpdateDate(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
                 .createDate(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
+                .tags(new ArrayList<>())
                 .build();
         expectedCertificateWithTags = GiftCertificate.builder()
                 .id(3)
@@ -58,69 +54,54 @@ class GiftCertificateDaoImplTest {
                 .duration(20)
                 .lastUpdateDate(LocalDateTime.of(2021, 5, 5, 15, 0, 0))
                 .createDate(LocalDateTime.of(2021, 5, 5, 15, 0, 0))
+                .tags(List.of(Tag.builder().id(1).name("food").build()))
                 .build();
         initializeExpectedListTags();
     }
 
-//    @Test
-//    void addTest() {
-//        boolean actual = certificateDao.add(expectedCertificateWithoutTags);
-//        assertTrue(actual);
-//    }
+    @Test
+    void addTest() {
+        expectedCertificateWithoutTags.setId(0);
+        assertDoesNotThrow(() -> certificateDao.add(expectedCertificateWithoutTags));
+    }
 
     @Test
     void findByIdTest() {
-        Optional<GiftCertificate> certificateOptional = certificateDao.findById(1L);
-        Assertions.assertEquals(certificateOptional.get(), expectedCertificateWithoutTags);
+        Optional<GiftCertificate> certificateOptional = certificateDao.findById(3L);
+        GiftCertificate actual = certificateOptional.get();
+        actual.setTags(List.of(Tag.builder().id(1).name("food").build()));
+        assertEquals(actual, expectedCertificateWithTags);
     }
 
-//    @ParameterizedTest
-//    @MethodSource("provideFindByParams")
-//    void findByParams(String tagName, String certificateName, String certificateDescription,
-//                      String orderByName, String orderByCreateDate) {
-//        List<GiftCertificate> actual = certificateDao.findByParams(tagName, certificateName, certificateDescription,
-//                orderByName, orderByCreateDate);
-//        assertEquals(List.of(expectedCertificateWithTags), actual);
-//    }
-//
-//    static List<Arguments> provideFindByParams() {
-//        List<Arguments> testCases = new ArrayList<>();
-//        testCases.add(Arguments.of("aut", "sta", "oo", "asc", "asc"));
-//        testCases.add(Arguments.of("aut", "sta", "oo", "asc", null));
-//        testCases.add(Arguments.of("aut", "sta", "oo", null, null));
-//        testCases.add(Arguments.of("aut", "sta", null, null, null));
-//        testCases.add(Arguments.of("aut", null, null, null, null));
-//        return testCases;
-//    }
-
-    @Test
-    void findCertificateTagsTest() {
-        List<Tag> actual = certificateDao.findCertificateTags(2L);
-        assertEquals(expectedList, actual);
+    @ParameterizedTest
+    @MethodSource("provideFindByParams")
+    void findByParams(List<String> tagNames, String certificateName, String certificateDescription,
+                      String orderByName, String orderByCreateDate) {
+        List<GiftCertificate> actual = certificateDao.findByParams(tagNames, certificateName, certificateDescription,
+                orderByName, orderByCreateDate, 1, 1);
+        assertEquals(List.of(expectedCertificateWithTags), actual);
     }
 
-//    @Test
-//    void updateTest() {
-//        boolean actual = certificateDao.update(expectedCertificateWithoutTags);
-//        assertTrue(actual);
-//    }
-//
-//    @Test
-//    void deleteTest() {
-//        boolean actual = certificateDao.delete(1L);
-//        assertTrue(actual);
-//    }
-
-    @Test
-    void detachAllTagsTest() {
-        boolean actual = certificateDao.detachAllTags(3L);
-        assertTrue(actual);
+    static List<Arguments> provideFindByParams() {
+        List<Arguments> testCases = new ArrayList<>();
+        testCases.add(Arguments.of(List.of("food"), "staura", "liciou", "asc", "asc"));
+        testCases.add(Arguments.of(List.of("food"), "taurant", "liciou", "asc", null));
+        testCases.add(Arguments.of(List.of("food"), "aurant", "liciou", null, null));
+        testCases.add(Arguments.of(List.of("food"), "restau", null, null, null));
+        testCases.add(Arguments.of(List.of("food"), null, null, null, null));
+        testCases.add(Arguments.of(null, "restau", null, null, null));
+        return testCases;
     }
 
     @Test
-    void attach() {
-        boolean actual = certificateDao.attach(1L, 3L);
-        assertTrue(actual);
+    void updateTest() {
+        assertDoesNotThrow(() -> certificateDao.update(expectedCertificateWithoutTags));
+    }
+
+    @Test
+    void deleteTest() {
+        expectedCertificateWithoutTags.setId(0);
+        assertDoesNotThrow(() -> certificateDao.delete(expectedCertificateWithoutTags));
     }
 
     @AfterAll
