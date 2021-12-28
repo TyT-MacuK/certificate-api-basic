@@ -32,19 +32,19 @@ public class GiftCertificateValidator {
     public List<TypeOfValidationError> isGiftCertificateValid(GiftCertificateDto giftCertificateDto) {
         List<TypeOfValidationError> validationErrors = new ArrayList<>();
         if (giftCertificateDto.getName() == null || !isNameValid(giftCertificateDto.getName())) {
-            log.log(Level.WARN, "invalid name " + giftCertificateDto.getName());
+            log.log(Level.WARN, "invalid name: " + giftCertificateDto.getName());
             validationErrors.add(TypeOfValidationError.INVALID_NAME);
         }
         if (giftCertificateDto.getDescription() == null || !isDescriptionValid(giftCertificateDto.getDescription())) {
-            log.log(Level.WARN, "invalid description " + giftCertificateDto.getDescription());
+            log.log(Level.WARN, "invalid description: " + giftCertificateDto.getDescription());
             validationErrors.add(TypeOfValidationError.INVALID_DESCRIPTION);
         }
         if (giftCertificateDto.getPrice() == null || !isPriceValid(giftCertificateDto.getPrice())) {
-            log.log(Level.WARN, "invalid price " + giftCertificateDto.getPrice());
+            log.log(Level.WARN, "invalid price: " + giftCertificateDto.getPrice());
             validationErrors.add(TypeOfValidationError.INVALID_PRICE);
         }
         if (!isDurationValid(giftCertificateDto.getDuration())) {
-            log.log(Level.WARN, "invalid duration " + giftCertificateDto.getDuration());
+            log.log(Level.WARN, "invalid duration: " + giftCertificateDto.getDuration());
             validationErrors.add(TypeOfValidationError.INVALID_DURATION);
         }
         return validationErrors;

@@ -24,11 +24,11 @@ public class TagValidator {
      * @return the list
      */
     public List<TypeOfValidationError> validateName(String tagName) {
-        log.log(Level.DEBUG, "method validateName()");
         List<TypeOfValidationError> validationErrors = new ArrayList<>();
 
         boolean nameIsValid = tagName != null && !tagName.isEmpty() && Pattern.matches(NAME_REGEX, tagName);
         if (!nameIsValid) {
+            log.log(Level.WARN, "tag name {} is invalid", tagName);
             validationErrors.add(TypeOfValidationError.INVALID_NAME);
         }
         return validationErrors;
