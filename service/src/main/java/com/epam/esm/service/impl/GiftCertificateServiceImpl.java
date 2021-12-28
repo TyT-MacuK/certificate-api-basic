@@ -3,13 +3,9 @@ package com.epam.esm.service.impl;
 import com.epam.esm.converter.GiftCertificateConverter;
 import com.epam.esm.converter.TagConverter;
 import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.TagDao;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateSearchParamsDto;
-import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.AttachException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InvalidEntityDataException;
 import com.epam.esm.exception.TypeOfValidationError;
@@ -20,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +23,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao certificateDao;
-    private final GiftCertificateConverter certificateConverter;
     private final GiftCertificateValidator certificateValidator;
     private final SearchParamsValidator searchParamsValidator;
+    private final GiftCertificateConverter certificateConverter;
+    private final TagConverter tagConverter;
 
     @Override
     @Transactional
@@ -40,21 +36,24 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throw new InvalidEntityDataException(errors, GiftCertificate.class);
         }
         GiftCertificate certificate = certificateConverter.convertToEntity(giftCertificateDto);
-        LocalDateTime createDay = LocalDateTime.now();
-        certificate.setCreateDate(createDay);
-        certificate.setLastUpdateDate(createDay);
         certificateDao.add(certificate);
     }
 
     @Override
-    public GiftCertificateDto findById(Long id) throws EntityNotFoundException {
+    public List<GiftCertificateDto> findAll(int pageNumber, int pageSize) {
+        List<GiftCertificate> certificateList = certificateDao.findAll(pageNumber, pageSize);
+        return certificateList.stream().map(certificateConverter::convertToDto).toList();
+    }
+
+    @Override
+    public GiftCertificateDto findById(long id) throws EntityNotFoundException {
         GiftCertificate giftCertificate = certificateDao.findById(id).orElseThrow(EntityNotFoundException::new);
         return certificateConverter.convertToDto(giftCertificate);
     }
 
     @Override
     @Transactional
-    public List<GiftCertificateDto> findByParams(GiftCertificateSearchParamsDto searchParams) throws InvalidEntityDataException {
+    public List<GiftCertificateDto> findByParams(GiftCertificateSearchParamsDto searchParams, int pageNumber, int pageSize) throws InvalidEntityDataException {
         List<TypeOfValidationError> errors = searchParamsValidator.isGiftCertificateSearchParamsDtoValid(searchParams);
         if (!errors.isEmpty()) {
             throw new InvalidEntityDataException(errors, GiftCertificate.class);
@@ -67,14 +66,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         String orderByCreateDate = searchParams.getOrderByCreateDate();
 
         return certificateDao.findByParams(tagName, certificateName,
-                        certificateDescription, orderByName, orderByCreateDate)
+                        certificateDescription, orderByName, orderByCreateDate, pageNumber, pageSize)
                 .stream().map(certificateConverter::convertToDto).toList();
     }
 
 
     @Override
-    @Transactional//TODO add tag
-    public boolean updateGiftCertificate(GiftCertificateDto giftCertificateDto) throws EntityNotFoundException, InvalidEntityDataException {
+    @Transactional
+    public void updateGiftCertificate(GiftCertificateDto giftCertificateDto) throws EntityNotFoundException, InvalidEntityDataException {
         List<TypeOfValidationError> errors = new ArrayList<>();
         GiftCertificate certificate = certificateDao.findById(giftCertificateDto.getId()).orElseThrow(EntityNotFoundException::new);
 
@@ -106,18 +105,18 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 errors.add(TypeOfValidationError.INVALID_DURATION);
             }
         }
+        if (giftCertificateDto.getTags() != null && !giftCertificateDto.getTags().isEmpty()) {
+            certificate.getTags().addAll(giftCertificateDto.getTags().stream().map(tagConverter::convertToEntity).toList());
+        }
         if (!errors.isEmpty()) {
             throw new InvalidEntityDataException(errors, GiftCertificate.class);
         }
-        LocalDateTime lastUpdateDate = LocalDateTime.now();
-        certificate.setLastUpdateDate(lastUpdateDate);
         certificateDao.update(certificate);
-        return false;
     }
 
     @Override
     @Transactional
-    public void delete(Long id) throws EntityNotFoundException {
+    public void delete(long id) throws EntityNotFoundException {
         GiftCertificate certificate = certificateDao.findById(id).orElseThrow(EntityNotFoundException::new);
         certificateDao.delete(certificate);
 

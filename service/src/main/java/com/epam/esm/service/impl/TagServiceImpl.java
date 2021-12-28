@@ -1,8 +1,8 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.converter.GiftCertificateConverter;
 import com.epam.esm.converter.TagConverter;
 import com.epam.esm.dao.TagDao;
+import com.epam.esm.dao.UserDao;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.EntityAlreadyExistsException;
@@ -24,7 +24,7 @@ public class TagServiceImpl implements TagService {
     private final TagDao tagDao;
     private final TagConverter tagConverter;
     private final TagValidator validator;
-    private final GiftCertificateConverter certificateConverter;
+    private final UserDao userDao;
 
     @Override
     @Transactional
@@ -42,20 +42,27 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDto findById(Long id) throws EntityNotFoundException {
+    public TagDto findById(long id) throws EntityNotFoundException {
         Optional<Tag> tag = tagDao.findById(id);
         return tag.map(tagConverter::convertToDto).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    @Transactional
-    public void delete(Long id) throws EntityNotFoundException {
-        Tag tag = tagDao.findById(id).orElseThrow(EntityNotFoundException::new);
-        tagDao.delete(tag);
+    public List<TagDto> findAll(int page, int pageSize) {
+        return tagDao.findAll(page, pageSize).stream().map(tagConverter::convertToDto).toList();
     }
 
     @Override
-    public List<TagDto> findAll() {
-        return tagDao.findAll().stream().map(tagConverter::convertToDto).toList();
+    public TagDto findMostWidelyUsedTag(Long userId) throws EntityNotFoundException {
+        userDao.findById(userId).orElseThrow(EntityNotFoundException::new);
+        Tag tag = tagDao.findMostWidelyUsedTag(userId).orElseThrow(EntityNotFoundException::new);
+        return tagConverter.convertToDto(tag);
+    }
+
+    @Override
+    @Transactional
+    public void delete(long id) throws EntityNotFoundException {
+        Tag tag = tagDao.findById(id).orElseThrow(EntityNotFoundException::new);
+        tagDao.delete(tag);
     }
 }
