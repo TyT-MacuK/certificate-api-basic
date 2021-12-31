@@ -1,5 +1,6 @@
 package com.epam.esm.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
@@ -23,5 +24,6 @@ public class TagDto extends RepresentationModel<TagDto> {
     @Size(min = 2, max = 45, message = NAME_LENGTH_ERROR)
     private String name;
 
+    @JsonIgnore
     private List<GiftCertificateDto> giftCertificates;
 }

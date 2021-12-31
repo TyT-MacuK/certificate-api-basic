@@ -2,7 +2,6 @@ package com.epam.esm.validator;
 
 import com.epam.esm.exception.TypeOfValidationError;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Level;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class UserValidator {
 
         boolean nameIsValid = userName != null && !userName.isEmpty() && Pattern.matches(NAME_REGEX, userName);
         if (!nameIsValid) {
-            log.log(Level.WARN, "user name {} is invalid", userName);
+            log.warn("user name {} is invalid", userName);
             validationErrors.add(TypeOfValidationError.INVALID_NAME);
         }
         return validationErrors;

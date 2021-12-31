@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Autowired
     public UserDaoImpl(EntityManager entityManager) {

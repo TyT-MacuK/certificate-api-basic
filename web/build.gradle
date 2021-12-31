@@ -7,10 +7,6 @@ version '1.0'
 
 dependencies {
     implementation project(':service')
-
-//    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: servletApiVersion
-//    implementation group: 'org.springframework', name: 'spring-web', version: springVersion
-//    implementation group: 'org.springframework', name: 'spring-webmvc', version: springVersion
 }
 
 war {

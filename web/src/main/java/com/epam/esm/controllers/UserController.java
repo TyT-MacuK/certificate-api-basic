@@ -10,12 +10,12 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -30,7 +30,7 @@ import static com.epam.esm.exception.LocalizationExceptionColumn.PAGE_SIZE_GREAT
 import static com.epam.esm.exception.LocalizationExceptionColumn.PAGE_SIZE_LESS_1;
 import static com.epam.esm.exception.LocalizationExceptionColumn.USER_ID_LESS_1;
 
-@Controller
+@RestController
 @Validated
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -62,10 +62,10 @@ public class UserController {
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
-    @GetMapping("/order/{user_id}")
+    @GetMapping("/{user_id}/order/{order_id}")
     public ResponseEntity<OrderDto> findUserOrderById(@PathVariable(name = "user_id")
                                                       @Min(value = 1, message = USER_ID_LESS_1) long userId,
-                                                      @RequestParam(name = "order_id")
+                                                      @PathVariable(name = "order_id")
                                                       @Min(value = 1, message = ORDER_ID_LESS_1) long orderId,
                                                       @RequestParam(value = "loc", required = false) String locale
     ) throws EntityNotFoundException {

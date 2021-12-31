@@ -33,11 +33,11 @@ class GiftCertificateDaoImplTest {
     private static GiftCertificate expectedCertificateWithoutTags;
     private static GiftCertificate expectedCertificateWithTags;
     private static List<Tag> expectedList;
+    private static Tag tagExample;
 
     @BeforeAll
     static void initialize() {
         expectedCertificateWithoutTags = GiftCertificate.builder()
-                .id(1)
                 .name("photosession")
                 .description("beautiful photos on memory")
                 .price(new BigDecimal("10.5"))
@@ -46,16 +46,22 @@ class GiftCertificateDaoImplTest {
                 .createDate(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
                 .tags(new ArrayList<>())
                 .build();
+        expectedCertificateWithoutTags.setId(1);
+
+        tagExample = new Tag();
+        tagExample.setId(1);
+        tagExample.setName("food");
         expectedCertificateWithTags = GiftCertificate.builder()
-                .id(3)
+
                 .name("restaurant")
                 .description("delicious food")
                 .price(new BigDecimal("17.5"))
                 .duration(20)
                 .lastUpdateDate(LocalDateTime.of(2021, 5, 5, 15, 0, 0))
                 .createDate(LocalDateTime.of(2021, 5, 5, 15, 0, 0))
-                .tags(List.of(Tag.builder().id(1).name("food").build()))
+                .tags(List.of(tagExample))
                 .build();
+        expectedCertificateWithTags.setId(3);
         initializeExpectedListTags();
     }
 
@@ -69,7 +75,7 @@ class GiftCertificateDaoImplTest {
     void findByIdTest() {
         Optional<GiftCertificate> certificateOptional = certificateDao.findById(3L);
         GiftCertificate actual = certificateOptional.get();
-        actual.setTags(List.of(Tag.builder().id(1).name("food").build()));
+        actual.setTags(List.of(tagExample));
         assertEquals(actual, expectedCertificateWithTags);
     }
 
@@ -107,7 +113,9 @@ class GiftCertificateDaoImplTest {
     @AfterAll
     static void tierDown() {
         expectedCertificateWithoutTags = null;
+        expectedCertificateWithTags = null;
         expectedList = null;
+        tagExample = null;
     }
 
     private static void initializeExpectedListTags() {

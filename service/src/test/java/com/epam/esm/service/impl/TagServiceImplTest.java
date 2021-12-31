@@ -7,9 +7,7 @@ import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.EntityAlreadyExistsException;
 import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.InvalidEntityDataException;
 import com.epam.esm.validator.TagValidator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,8 +17,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,16 +44,14 @@ class TagServiceImplTest {
     @BeforeAll
     static void initialize() {
         MockitoAnnotations.openMocks(TagServiceImplTest.class);
-        tagDto = new TagDto();
-        tagDto.setId(1);
-        tagDto.setName("name");
+        tagDto = TagDto.builder().id(1).name("name").build();
 
-        tag = new Tag();
-        tag.setId(1);
-        tag.setName("name");
-
-        certificateDto = new GiftCertificateDto();
-        certificate = new GiftCertificate();
+//        tag = new Tag();
+//        tag.setId(1);
+//        tag.setName("name");
+//
+//        certificateDto = new GiftCertificateDto();
+//        certificate = new GiftCertificate();
     }
 
 //    @Test
@@ -78,13 +72,13 @@ class TagServiceImplTest {
         assertEquals(tagDto, actual);
     }
 
-    @Test
-    void findByPartOfNameTest() {
-        when(tagDao.findByPartOfName("es")).thenReturn(List.of(tag));
-        when(tagConverter.convertToDto(tag)).thenReturn(tagDto);
-        List<TagDto> actual = service.findByPartOfName("es");
-        assertEquals(List.of(tagDto), actual);
-    }
+//    @Test
+//    void findByPartOfNameTest() {
+//        when(tagDao.findByPartOfName("es")).thenReturn(List.of(tag));
+//        when(tagConverter.convertToDto(tag)).thenReturn(tagDto);
+//        List<TagDto> actual = service.findByPartOfName("es");
+//        assertEquals(List.of(tagDto), actual);
+//    }
 
 //    @Test
 //    void deleteTest() throws EntityNotFoundException {
@@ -94,12 +88,12 @@ class TagServiceImplTest {
 //        assertTrue(actual);
 //    }
 
-    @Test
-    void findTagCertificatesTest() throws EntityNotFoundException {
-        when(tagDao.findById(1L)).thenReturn(Optional.of(tag));
-        when(tagDao.findTagCertificates(1L)).thenReturn(List.of(certificate));
-        when(certificateConverter.convertToDto(certificate)).thenReturn(certificateDto);
-        List<GiftCertificateDto> actual = service.findTagCertificates(1L);
-        assertEquals(List.of(certificateDto), actual);
-    }
+//    @Test
+//    void findTagCertificatesTest() throws EntityNotFoundException {
+//        when(tagDao.findById(1L)).thenReturn(Optional.of(tag));
+//        when(tagDao.findTagCertificates(1L)).thenReturn(List.of(certificate));
+//        when(certificateConverter.convertToDto(certificate)).thenReturn(certificateDto);
+//        List<GiftCertificateDto> actual = service.findTagCertificates(1L);
+//        assertEquals(List.of(certificateDto), actual);
+//    }
 }

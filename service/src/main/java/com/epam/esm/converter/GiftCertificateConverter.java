@@ -20,8 +20,7 @@ public class GiftCertificateConverter {
      * @return the gift certificate
      */
     public GiftCertificate convertToEntity(GiftCertificateDto dto) {
-        return GiftCertificate.builder()
-                .id(dto.getId())
+         GiftCertificate certificate = GiftCertificate.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .price(dto.getPrice())
@@ -30,6 +29,8 @@ public class GiftCertificateConverter {
                 .lastUpdateDate(dto.getLastUpdateDay())
                 .tags(dto.getTags().stream().map(tagConverter::convertToEntity).toList())
                 .build();
+        certificate.setId(dto.getId());
+        return certificate;
     }
 
     /**

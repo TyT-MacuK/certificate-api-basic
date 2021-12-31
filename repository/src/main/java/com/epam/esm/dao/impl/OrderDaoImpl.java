@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 @Repository
 public class OrderDaoImpl extends AbstractDao<Long, Order> implements OrderDao {
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Autowired
     public OrderDaoImpl(EntityManager entityManager) {

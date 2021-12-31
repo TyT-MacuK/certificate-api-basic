@@ -7,6 +7,4 @@ dependencies {
     implementation group: 'com.zaxxer', name: 'HikariCP', version: hikariVersion
     implementation group: 'mysql', name: 'mysql-connector-java', version: mysqlConnectorVersion
     implementation group: 'com.h2database', name: 'h2', version: h2Version
-
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.6.1'
 }

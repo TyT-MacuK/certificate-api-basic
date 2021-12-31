@@ -21,13 +21,14 @@ public class OrderConverter {
      * @return the order
      */
     public Order convertToEntity(OrderDto dto) {
-        return Order.builder()
-                .id(dto.getId())
+        Order order = Order.builder()
                 .cost(dto.getCost())
                 .createDate(dto.getCreateDate())
                 .user(userConverter.convertToEntity(dto.getUser()))
                 .giftCertificate(certificateConverter.convertToEntity(dto.getGiftCertificate()))
                 .build();
+        order.setId(dto.getId());
+        return order;
     }
 
     /**

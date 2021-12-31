@@ -36,5 +36,6 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
             pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
             timezone = "UTC")
     private LocalDateTime lastUpdateDay;
+
     private List<TagDto> tags;
 }

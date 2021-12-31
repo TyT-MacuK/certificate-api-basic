@@ -3,7 +3,6 @@ package com.epam.esm.validator;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.exception.TypeOfValidationError;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Level;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -32,19 +31,19 @@ public class GiftCertificateValidator {
     public List<TypeOfValidationError> isGiftCertificateValid(GiftCertificateDto giftCertificateDto) {
         List<TypeOfValidationError> validationErrors = new ArrayList<>();
         if (giftCertificateDto.getName() == null || !isNameValid(giftCertificateDto.getName())) {
-            log.log(Level.WARN, "invalid name: " + giftCertificateDto.getName());
+            log.warn("invalid name: " + giftCertificateDto.getName());
             validationErrors.add(TypeOfValidationError.INVALID_NAME);
         }
-        if (giftCertificateDto.getDescription() == null || !isDescriptionValid(giftCertificateDto.getDescription())) {
-            log.log(Level.WARN, "invalid description: " + giftCertificateDto.getDescription());
+        if (giftCertificateDto.getDescription() == null || !isDescriptionValid(giftCertificateDto.getDescription()))  {
+            log.warn("invalid description: " + giftCertificateDto.getDescription());
             validationErrors.add(TypeOfValidationError.INVALID_DESCRIPTION);
         }
         if (giftCertificateDto.getPrice() == null || !isPriceValid(giftCertificateDto.getPrice())) {
-            log.log(Level.WARN, "invalid price: " + giftCertificateDto.getPrice());
+            log.warn("invalid price: " + giftCertificateDto.getPrice());
             validationErrors.add(TypeOfValidationError.INVALID_PRICE);
         }
         if (!isDurationValid(giftCertificateDto.getDuration())) {
-            log.log(Level.WARN, "invalid duration: " + giftCertificateDto.getDuration());
+            log.warn("invalid duration: " + giftCertificateDto.getDuration());
             validationErrors.add(TypeOfValidationError.INVALID_DURATION);
         }
         return validationErrors;

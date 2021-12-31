@@ -9,9 +9,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -29,11 +26,6 @@ import java.util.List;
 @Entity
 @Table(name = "gift_certificate")
 public class GiftCertificate extends AbstractEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
-
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -80,7 +72,7 @@ public class GiftCertificate extends AbstractEntity {
 
         GiftCertificate that = (GiftCertificate) o;
 
-        if (id != that.id) return false;
+        if (this.getId() != that.getId()) return false;
         if (duration != that.duration) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
@@ -93,8 +85,8 @@ public class GiftCertificate extends AbstractEntity {
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + Long.hashCode(id);
+        int result = (int) (this.getId() ^ (this.getId() >>> 32));
+        result = 31 * result + Long.hashCode(this.getId());
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
