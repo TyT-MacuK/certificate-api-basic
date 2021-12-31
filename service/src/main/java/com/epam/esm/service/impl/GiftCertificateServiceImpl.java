@@ -39,7 +39,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         certificateDao.add(certificate);
     }
 
-    @Override
+    @Override//TODO
     public List<GiftCertificateDto> findAll(int pageNumber, int pageSize) {
         List<GiftCertificate> certificateList = certificateDao.findAll(pageNumber, pageSize);
         return certificateList.stream().map(certificateConverter::convertToDto).toList();
