@@ -1,0 +1,12 @@
+package com.epam.esm.exception;
+
+public enum TypeOfValidationError {
+    INVALID_NAME,
+    INVALID_DESCRIPTION,
+    INVALID_PRICE,
+    INVALID_DURATION,
+    INVALID_TAG_NAME,
+    INVALID_CERTIFICATE_NAME,
+    INVALID_ORDER_BY_NAME_PARAM,
+    INVALID_ORDER_BY_CREATE_DAY_PARAM
+}
