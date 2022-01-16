@@ -1,23 +1,37 @@
-plugins {
-    id 'java'
-}
+allprojects {
+    apply plugin: 'java'
 
-group 'com.epam'
-version '1.0-SNAPSHOT'
+    repositories {
+        mavenCentral()
+    }
 
-repositories {
-    mavenCentral()
-}
+    dependencies {
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springVersion
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springVersion
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springVersion
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: springVersion
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springVersion
+        implementation group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure',
+                version: springVersion
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: springVersion
 
-dependencies {
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
 
-    implementation group: 'org.springframework', name: 'spring-core', version: '5.3.12'
-    implementation group: 'org.springframework', name: 'spring-context', version: '5.3.12'
-    implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.3.12'
-}
+        implementation group: 'io.jsonwebtoken', name: 'jjwt', version: jsonWebTokenVersion
 
-test {
-    useJUnitPlatform()
+        implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+
+        compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+        annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+
+        implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
+
+        testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
+        testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springVersion
+        testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
+//        testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: junitVersion
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }
