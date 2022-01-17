@@ -11,15 +11,12 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static com.epam.esm.exception.LocalizationExceptionColumn.USER_ID_LESS_1;
-import static com.epam.esm.exception.LocalizationExceptionColumn.USER_ID_NULL;
-
 @Data
 @Builder
 @Relation(collectionRelation = "content", itemRelation = "order")
 public class OrderDto extends RepresentationModel<OrderDto> {
-    @NotNull(message = USER_ID_NULL)
-    @Min(value = 1, message = USER_ID_LESS_1)
+    @NotNull(message = "{user_id_null}")
+    @Min(value = 1, message = "{user_id_less_1}")
     private long id;
 
     private BigDecimal cost;

@@ -2,16 +2,13 @@ package com.epam.esm.converter;
 
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
  * The type Tag converter.
  */
 @Component
-@RequiredArgsConstructor
 public class TagConverter {
-    private final GiftCertificateConverter certificateConverter;
 
     /**
      * Convert to tag.
@@ -20,9 +17,9 @@ public class TagConverter {
      * @return the tag
      */
     public Tag convertToEntity(TagDto dto) {
-        return Tag.builder().id(dto.getId()).name(dto.getName())
-                .giftCertificates(dto.getGiftCertificates().stream().map(certificateConverter::convertToEntity).toList())
-                .build();
+        Tag tag = Tag.builder().name(dto.getName()).build();
+        tag.setId(dto.getId());
+        return tag;
     }
 
     /**
@@ -32,8 +29,6 @@ public class TagConverter {
      * @return the tag dto
      */
     public TagDto convertToDto(Tag tag) {
-        return TagDto.builder().id(tag.getId()).name(tag.getName())
-                .giftCertificates(tag.getGiftCertificates().stream().map(certificateConverter::convertToDto).toList())
-                .build();
+        return TagDto.builder().id(tag.getId()).name(tag.getName()).build();
     }
 }

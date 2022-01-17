@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +21,11 @@ import java.util.List;
 public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> {
 
     private long id;
+
+    @Size(min = 2, max = 45, message = "{gift_certificate_name_length_error}")
     private String name;
+
+    @Size(min = 2, max = 100, message = "{description_length_error}")
     private String description;
     private BigDecimal price;
     private int duration;
@@ -36,5 +41,6 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
             pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
             timezone = "UTC")
     private LocalDateTime lastUpdateDay;
+
     private List<TagDto> tags;
 }

@@ -27,7 +27,7 @@ public class TagDaoImpl extends AbstractDao<Long, Tag> implements TagDao {
 
     private static final String ID_PARAM = "id";
 
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Autowired
     public TagDaoImpl(EntityManager entityManager) {
@@ -37,9 +37,15 @@ public class TagDaoImpl extends AbstractDao<Long, Tag> implements TagDao {
 
     @Override
     public Optional<Tag> findMostWidelyUsedTag(Long userId) {
-        Tag tag = (Tag) entityManager.createNativeQuery(FIND_MOST_WIDELY_USED_TAG, Tag.class)
-                .setParameter(ID_PARAM, userId).getSingleResult();
-        return Optional.ofNullable(tag);
+        Tag result;
+        try {
+            result = (Tag) entityManager.createNativeQuery(FIND_MOST_WIDELY_USED_TAG, Tag.class)
+                    .setParameter(ID_PARAM, userId).getSingleResult();
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(result);
     }
 
     @Override

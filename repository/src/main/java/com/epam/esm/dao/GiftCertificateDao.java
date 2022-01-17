@@ -1,26 +1,12 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.GiftCertificate;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * The interface Gift certificate dao.
  */
-public interface GiftCertificateDao extends CrudDao<Long, GiftCertificate> {
-
-    /**
-     * Find by params.
-     *
-     * @param tagNames               the tag names
-     * @param certificateName        the certificate name
-     * @param certificateDescription the certificate description
-     * @param orderByName            the order by name
-     * @param orderByCreateDate      the order by create date
-     * @param pageNumber             the page number
-     * @param pageSize               the page size
-     * @return the list
-     */
-    List<GiftCertificate> findByParams(List<String> tagNames, String certificateName, String certificateDescription,
-                                  String orderByName, String orderByCreateDate, int pageNumber, int pageSize);
+public interface GiftCertificateDao extends JpaRepository<GiftCertificate, Long>,
+        JpaSpecificationExecutor<GiftCertificate> {
 }

@@ -3,7 +3,6 @@ package com.epam.esm.service;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.exception.EntityAlreadyExistsException;
 import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.InvalidEntityDataException;
 
 import java.util.List;
 
@@ -15,10 +14,9 @@ public interface TagService {
      * Add tag.
      *
      * @param tag the tag
-     * @throws InvalidEntityDataException   the invalid entity data exception
      * @throws EntityAlreadyExistsException the entity already exists exception
      */
-    void add(TagDto tag) throws InvalidEntityDataException, EntityAlreadyExistsException;
+    void add(TagDto tag) throws EntityAlreadyExistsException;
 
     /**
      * Find tag by id.

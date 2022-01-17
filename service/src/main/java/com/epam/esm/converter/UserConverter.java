@@ -17,10 +17,11 @@ public class UserConverter {
      * @return the user
      */
     public User convertToEntity(UserDto dto) {
-        return User.builder()
-                .id(dto.getId())
+        User user = User.builder()
                 .name(dto.getName())
                 .build();
+        user.setId(dto.getId());
+        return user;
     }
 
     /**

@@ -11,7 +11,7 @@ public final class LocalizationExceptionColumn {
     public static final String DESCRIPTION_LENGTH_ERROR = "description_length_error";
     public static final String PRICE_ERROR = "price_less_0.01";
     public static final String DURATION_ERROR = "duration_error";
-    public static final String TAG_NAME_LENGTH_ERROR = "tag_name_length_error";
+    public static final String TAG_NAME_ERROR = "tag_name_length_error";
     public static final String GIFT_CERTIFICATE_NAME_LENGTH_ERROR = "gift_certificate_name_length_error";
     public static final String ORDER_SORT_BY_NAME_PARAM_ERROR = "order_by_name";
     public static final String ORDER_SORT_BY_CREATE_DATE_PARAM_ERROR = "order_by_create_date";

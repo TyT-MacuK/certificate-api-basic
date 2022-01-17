@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.List;
@@ -21,11 +18,6 @@ import java.util.List;
 @Entity
 @Table(name = "tag")
 public class Tag extends AbstractEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
-
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
@@ -41,14 +33,14 @@ public class Tag extends AbstractEntity {
 
         Tag tag = (Tag) o;
 
-        if (id != tag.id) return false;
+        if (this.getId() != tag.getId()) return false;
         return name != null ? name.equals(tag.name) : tag.name == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + Long.hashCode(id);
+        int result = (int) (this.getId() ^ (this.getId() >>> 32));
+        result = 31 * result + Long.hashCode(this.getId());
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
@@ -56,7 +48,7 @@ public class Tag extends AbstractEntity {
     @Override
     public String toString() {
         return "Tag{" +
-                "id=" + id +
+                "id=" + this.getId() +
                 ", name=" + name +
                 '}';
     }

@@ -43,10 +43,10 @@ public interface UserService {
      * Find user orders list.
      *
      * @param id       the id
-     * @param page     the page
+     * @param pageNumber     the page number
      * @param pageSize the page size
      * @return the list
      * @throws EntityNotFoundException the entity not found exception
      */
-    List<OrderDto> findUserOrders(long id, int page, int pageSize) throws EntityNotFoundException;
+    List<OrderDto> findUserOrders(long id, int pageNumber, int pageSize) throws EntityNotFoundException;
 }

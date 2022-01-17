@@ -10,7 +10,9 @@ import com.epam.esm.entity.User;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,10 +32,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll(int pageNumber, int pageSize) {
-        return userDao.findAll(pageNumber, pageSize).stream().map(userConverter::convertToDto).toList();
+        return userDao.findAll(PageRequest.of(pageNumber - 1, pageSize)).stream().map(userConverter::convertToDto).toList();
     }
 
     @Override
+    @Transactional
     public OrderDto findUserOrderById(long userId, long orderId) throws EntityNotFoundException {
         userDao.findById(userId).orElseThrow(EntityNotFoundException::new);
         Order order = userDao.findUserOrderById(userId, orderId).orElseThrow(EntityNotFoundException::new);
@@ -41,8 +44,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<OrderDto> findUserOrders(long id, int page, int pageSize) throws EntityNotFoundException {
+    @Transactional
+    public List<OrderDto> findUserOrders(long id, int pageNumber, int pageSize) throws EntityNotFoundException {
         userDao.findById(id).orElseThrow(EntityNotFoundException::new);
-        return userDao.findUserOrders(id, page, pageSize).stream().map(orderConverter::convertToDto).toList();
+        return userDao.findUserOrders(id, PageRequest.of(pageNumber - 1, pageSize)).stream().map(orderConverter::convertToDto).toList();
     }
 }

@@ -7,11 +7,9 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.EntityAlreadyExistsException;
 import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.InvalidEntityDataException;
-import com.epam.esm.exception.TypeOfValidationError;
 import com.epam.esm.service.TagService;
-import com.epam.esm.validator.TagValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,22 +21,17 @@ import java.util.Optional;
 public class TagServiceImpl implements TagService {
     private final TagDao tagDao;
     private final TagConverter tagConverter;
-    private final TagValidator validator;
     private final UserDao userDao;
 
     @Override
     @Transactional
-    public void add(TagDto tagDto) throws InvalidEntityDataException, EntityAlreadyExistsException {
-        List<TypeOfValidationError> errorList = validator.validateName(tagDto.getName());
-        if (!errorList.isEmpty()) {
-            throw new InvalidEntityDataException(errorList, Tag.class);
-        }
+    public void add(TagDto tagDto) throws EntityAlreadyExistsException {
         Optional<Tag> optionalTag = tagDao.findByName(tagDto.getName());
         if (optionalTag.isPresent()) {
             throw new EntityAlreadyExistsException();
         }
         Tag tag = tagConverter.convertToEntity(tagDto);
-        tagDao.add(tag);
+        tagDao.save(tag);
     }
 
     @Override
@@ -49,7 +42,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDto> findAll(int page, int pageSize) {
-        return tagDao.findAll(page, pageSize).stream().map(tagConverter::convertToDto).toList();
+        return tagDao.findAll(PageRequest.of(page - 1, pageSize)).stream().map(tagConverter::convertToDto).toList();
     }
 
     @Override

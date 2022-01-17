@@ -22,7 +22,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<Long, GiftCertificate> i
     private static final String ASCENDING_PARAM = "ASC";
     private static final String DESCENDING_PARAM = "DESC";
 
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Autowired
     public GiftCertificateDaoImpl(EntityManager entityManager) {
@@ -52,9 +52,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<Long, GiftCertificate> i
         tagOptionalPredicate.ifPresent(query::where);
 
         List<Order> requestOrders = createOrderingPredicate(criteriaBuilder, root, orderByName, orderByCreateDate);
-        for (Order requestOrder : requestOrders) {
-            query.orderBy(requestOrder);
-        }
+        requestOrders.stream().map(query::orderBy).toList();
         return entityManager.createQuery(query)
                 .setFirstResult((pageNumber - 1) * pageSize)
                 .setMaxResults(pageSize)
@@ -84,9 +82,8 @@ public class GiftCertificateDaoImpl extends AbstractDao<Long, GiftCertificate> i
         Predicate result = null;
         List<Predicate> tagPredicates = new ArrayList<>();
         if (tagNames != null && !tagNames.isEmpty()) {
-            for(String tagName: tagNames) {
-                tagPredicates.add(criteriaBuilder.equal(certificateRoot.join("tags").get("name"), tagName));
-            }
+            tagNames.stream().map(tagName -> tagPredicates.add(criteriaBuilder.equal(
+                    certificateRoot.join("tags").get("name"), tagName))).toList();
             result = tagPredicates.get(0);
                 for (Predicate predicate : tagPredicates) {
                     result = criteriaBuilder.or(result, predicate);

@@ -29,6 +29,6 @@ public class OrderServiceImpl implements OrderService {
                 .giftCertificate(giftCertificate)
                 .cost(giftCertificate.getPrice())
                 .build();
-        orderDao.add(order);
+        orderDao.save(order);
     }
 }

@@ -3,7 +3,6 @@ package com.epam.esm.validator;
 import com.epam.esm.dto.GiftCertificateSearchParamsDto;
 import com.epam.esm.exception.TypeOfValidationError;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Level;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -30,25 +29,25 @@ public class SearchParamsValidator {
         if (tagNames != null && !tagNames.isEmpty()) {
             for (String name : tagNames) {
                 if (name != null && !isNameValid(name)) {
-                    log.log(Level.WARN, "invalid tag name: " + name);
+                    log.warn("invalid tag name: " + name);
                     validationErrors.add(TypeOfValidationError.INVALID_TAG_NAME);
                 }
             }
         }
         if (searchParams.getCertificateName() != null && !isNameValid(searchParams.getCertificateName())) {
-            log.log(Level.WARN, "invalid certificate name: " + searchParams.getCertificateName());
+            log.warn("invalid certificate name: " + searchParams.getCertificateName());
             validationErrors.add(TypeOfValidationError.INVALID_CERTIFICATE_NAME);
         }
         if (searchParams.getCertificateDescription() != null && !isDescriptionValid(searchParams.getCertificateDescription())) {
-            log.log(Level.WARN, "invalid description: " + searchParams.getCertificateDescription());
+            log.warn("invalid description: " + searchParams.getCertificateDescription());
             validationErrors.add(TypeOfValidationError.INVALID_DESCRIPTION);
         }
         if (searchParams.getOrderByName() != null && !isSortOrderValid(searchParams.getOrderByName())) {
-            log.log(Level.WARN, "invalid order by name param: " + searchParams.getOrderByName());
+            log.warn("invalid order by name param: " + searchParams.getOrderByName());
             validationErrors.add(TypeOfValidationError.INVALID_ORDER_BY_NAME_PARAM);
         }
         if (searchParams.getOrderByCreateDate() != null && !isSortOrderValid(searchParams.getOrderByCreateDate())) {
-            log.log(Level.WARN, "invalid order by create date param: " + searchParams.getOrderByCreateDate());
+            log.warn("invalid order by create date param: " + searchParams.getOrderByCreateDate());
             validationErrors.add(TypeOfValidationError.INVALID_ORDER_BY_NAME_PARAM);
         }
         return validationErrors;

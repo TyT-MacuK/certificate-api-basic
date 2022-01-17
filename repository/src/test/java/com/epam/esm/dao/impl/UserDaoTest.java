@@ -32,7 +32,8 @@ class UserDaoTest {
 
     @BeforeAll
     static void initialize() {
-        expectedUserWithoutOrder = User.builder().id(2).name("Tom").orders(new ArrayList<>()).build();
+        expectedUserWithoutOrder = User.builder().name("Tom").orders(new ArrayList<>()).build();
+        expectedUserWithoutOrder.setId(2);
     }
 
     @Test
@@ -49,24 +50,26 @@ class UserDaoTest {
 
     @Test
     void findUserOrderByIdTest() {
-        Order expectedOrder = Order.builder().id(1).createDate(
+        Order expectedOrder = Order.builder().createDate(
                         LocalDateTime.of(2021, 12, 27, 14, 0, 0))
                 .cost(BigDecimal.valueOf(10.5))
                 .giftCertificate(certificateDao.findById(1L).get())
                 .user(userDao.findById(1L).get())
                 .build();
+        expectedOrder.setId(1);
         Order actual = userDao.findUserOrderById(1, 1).get();
         assertEquals(expectedOrder, actual);
     }
 
     @Test
     void findUserOrdersTest() {
-        Order expectedOrder = Order.builder().id(1).createDate(
+        Order expectedOrder = Order.builder().createDate(
                         LocalDateTime.of(2021, 12, 27, 14, 0, 0))
                 .cost(BigDecimal.valueOf(10.5))
                 .giftCertificate(certificateDao.findById(1L).get())
                 .user(userDao.findById(1L).get())
                 .build();
+        expectedOrder.setId(1);
         List<Order> expected = new ArrayList<>();
         expected.add(expectedOrder);
 

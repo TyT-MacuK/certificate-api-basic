@@ -4,7 +4,6 @@ import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateSearchParamsDto;
 import com.epam.esm.exception.EntityAlreadyExistsException;
 import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.InvalidEntityDataException;
 
 import java.util.List;
 
@@ -17,10 +16,9 @@ public interface GiftCertificateService {
      * Add gift certificate.
      *
      * @param giftCertificate the gift certificate
-     * @throws InvalidEntityDataException   the invalid entity data exception
      * @throws EntityAlreadyExistsException the entity already exists exception
      */
-    void add(GiftCertificateDto giftCertificate) throws InvalidEntityDataException, EntityAlreadyExistsException;
+    void add(GiftCertificateDto giftCertificate) throws EntityAlreadyExistsException;
 
     /**
      * Find by id gift certificate.
@@ -48,20 +46,16 @@ public interface GiftCertificateService {
      * @param pageNumber   the page number
      * @param pageSize     the page size
      * @return the list
-     * @throws InvalidEntityDataException the invalid entity data exception
      */
-    List<GiftCertificateDto> findByParams(GiftCertificateSearchParamsDto searchParams, int pageNumber, int pageSize)
-            throws InvalidEntityDataException;
+    List<GiftCertificateDto> findByParams(GiftCertificateSearchParamsDto searchParams, int pageNumber, int pageSize);
 
     /**
      * Update gift certificate.
      *
      * @param certificate the certificate
-     * @return the boolean
      * @throws EntityNotFoundException    the entity not found exception
-     * @throws InvalidEntityDataException the invalid entity data exception
      */
-    void updateGiftCertificate(GiftCertificateDto certificate) throws EntityNotFoundException, InvalidEntityDataException;
+    void updateGiftCertificate(GiftCertificateDto certificate) throws EntityNotFoundException;
 
     /**
      * Delete boolean.
