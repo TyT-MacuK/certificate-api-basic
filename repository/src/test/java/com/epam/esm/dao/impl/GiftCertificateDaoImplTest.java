@@ -1,7 +1,7 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.config.TestDataBaseConfig;
 import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.GiftCertificateSearchSpecificationBuilder;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import org.junit.jupiter.api.AfterAll;
@@ -10,10 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,9 +25,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(classes = TestDataBaseConfig.class)
-@Transactional
-@TestPropertySource(locations = "classpath:init_test_db.properties")
+@DataJpaTest
+@RunWith(SpringRunner.class)
 class GiftCertificateDaoImplTest {
     @Autowired
     private GiftCertificateDao certificateDao;
@@ -46,16 +46,15 @@ class GiftCertificateDaoImplTest {
                 .createDate(LocalDateTime.of(2021, 12, 1, 12, 0, 0))
                 .tags(new ArrayList<>())
                 .build();
-        expectedCertificateWithoutTags.setId(1);
+        expectedCertificateWithoutTags.setId(10);
 
         tagExample = new Tag();
         tagExample.setId(1);
         tagExample.setName("food");
         expectedCertificateWithTags = GiftCertificate.builder()
-
                 .name("restaurant")
                 .description("delicious food")
-                .price(new BigDecimal("17.5"))
+                .price(new BigDecimal("17.50"))
                 .duration(20)
                 .lastUpdateDate(LocalDateTime.of(2021, 5, 5, 15, 0, 0))
                 .createDate(LocalDateTime.of(2021, 5, 5, 15, 0, 0))
@@ -67,8 +66,7 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void addTest() {
-        expectedCertificateWithoutTags.setId(0);
-        assertDoesNotThrow(() -> certificateDao.add(expectedCertificateWithoutTags));
+        assertDoesNotThrow(() -> certificateDao.save(expectedCertificateWithoutTags));
     }
 
     @Test
@@ -79,35 +77,43 @@ class GiftCertificateDaoImplTest {
         assertEquals(actual, expectedCertificateWithTags);
     }
 
+    @Test
+    void updateTest() {
+        assertDoesNotThrow(() -> certificateDao.save(expectedCertificateWithoutTags));
+    }
+
+    @Test
+    void deleteTest() {
+        assertDoesNotThrow(() -> certificateDao.delete(expectedCertificateWithoutTags));
+    }
+
     @ParameterizedTest
     @MethodSource("provideFindByParams")
-    void findByParams(List<String> tagNames, String certificateName, String certificateDescription,
-                      String orderByName, String orderByCreateDate) {
-        List<GiftCertificate> actual = certificateDao.findByParams(tagNames, certificateName, certificateDescription,
-                orderByName, orderByCreateDate, 1, 1);
+    void findByParams(Specification<GiftCertificate> specification) {
+        List<GiftCertificate> actual = certificateDao.findAll(specification);
         assertEquals(List.of(expectedCertificateWithTags), actual);
     }
 
     static List<Arguments> provideFindByParams() {
         List<Arguments> testCases = new ArrayList<>();
-        testCases.add(Arguments.of(List.of("food"), "staura", "liciou", "asc", "asc"));
-        testCases.add(Arguments.of(List.of("food"), "taurant", "liciou", "asc", null));
-        testCases.add(Arguments.of(List.of("food"), "aurant", "liciou", null, null));
-        testCases.add(Arguments.of(List.of("food"), "restau", null, null, null));
-        testCases.add(Arguments.of(List.of("food"), null, null, null, null));
-        testCases.add(Arguments.of(null, "restau", null, null, null));
+        testCases.add(Arguments.of(new GiftCertificateSearchSpecificationBuilder()
+                .certificateName("restaurant")
+                .certificateDescription("delicious food")
+                .tagNames(List.of("food"))
+                .orderByName("asc")
+                .orderByCreateDate("asc")
+                .build()));
+        testCases.add(Arguments.of(new GiftCertificateSearchSpecificationBuilder()
+                .certificateDescription("delicious food")
+                .tagNames(List.of("food"))
+                .orderByName("asc")
+                .orderByCreateDate("asc")
+                .build()));
+        testCases.add(Arguments.of(new GiftCertificateSearchSpecificationBuilder()
+                .certificateName("restaurant")
+                .orderByCreateDate("asc")
+                .build()));
         return testCases;
-    }
-
-    @Test
-    void updateTest() {
-        assertDoesNotThrow(() -> certificateDao.update(expectedCertificateWithoutTags));
-    }
-
-    @Test
-    void deleteTest() {
-        expectedCertificateWithoutTags.setId(0);
-        assertDoesNotThrow(() -> certificateDao.delete(expectedCertificateWithoutTags));
     }
 
     @AfterAll

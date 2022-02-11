@@ -1,16 +1,17 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.config.TestDataBaseConfig;
+
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +20,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(classes = TestDataBaseConfig.class)
-@Transactional
-@TestPropertySource(locations = "classpath:init_test_db.properties")
+@DataJpaTest
+@RunWith(SpringRunner.class)
 class TagDaoImplTest {
     @Autowired
     private TagDao tagDao;
@@ -40,7 +40,7 @@ class TagDaoImplTest {
 
     @Test
     void addTest() {
-        assertDoesNotThrow(() -> tagDao.add(Tag.builder().name("Test").build()));
+        assertDoesNotThrow(() -> tagDao.save(Tag.builder().name("Test").build()));
     }
 
     @Test
@@ -51,7 +51,7 @@ class TagDaoImplTest {
 
     @Test
     void findAll() {
-        List<Tag> actual = tagDao.findAll(1, 1);
+        List<Tag> actual = tagDao.findAll(PageRequest.of(0,1)).stream().toList();
         assertEquals(expectedList, actual);
     }
 
@@ -69,7 +69,7 @@ class TagDaoImplTest {
 
     @Test
     void update() {
-        assertDoesNotThrow(() -> tagDao.update(expectedTag));
+        assertDoesNotThrow(() -> tagDao.save(expectedTag));
     }
 
     @Test
