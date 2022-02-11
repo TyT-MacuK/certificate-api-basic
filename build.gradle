@@ -1,28 +1,11 @@
-//buildscript {
-//    repositories {
-//        mavenCentral()
-//    }
-//    dependencies {
-//        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.6.1")
-//    }
-//}
-
 allprojects {
     apply plugin: 'java'
-//    apply plugin: 'org.springframework.boot'
-
 
     jar {
         manifest {
             attributes('Main-Class': 'com.epam.esm.Application')
         }
     }
-
-//    bootJar {
-//        manifest {
-//            attributes 'Start-Class': 'com.epam.esm.Application'
-//        }
-//    }
 
     repositories {
         mavenCentral()
