@@ -2,7 +2,6 @@ package com.epam.esm.config;
 
 import com.epam.esm.filter.CustomTokenFilter;
 import com.epam.esm.handler.CustomAccessDeniedHandlerImpl;
-import com.epam.esm.handler.CustomAuthenticationEntryPointImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
