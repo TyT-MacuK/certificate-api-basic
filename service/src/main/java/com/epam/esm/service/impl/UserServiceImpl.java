@@ -32,7 +32,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll(int pageNumber, int pageSize) {
-        return userDao.findAll(PageRequest.of(pageNumber - 1, pageSize)).stream().map(userConverter::convertToDto).toList();
+        return userDao.findAll(PageRequest.of(pageNumber - 1, pageSize))
+                .stream().map(userConverter::convertToDto).toList();
     }
 
     @Override
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public List<OrderDto> findUserOrders(long id, int pageNumber, int pageSize) throws EntityNotFoundException {
         userDao.findById(id).orElseThrow(EntityNotFoundException::new);
-        return userDao.findUserOrders(id, PageRequest.of(pageNumber - 1, pageSize)).stream().map(orderConverter::convertToDto).toList();
+        return userDao.findUserOrders(id, PageRequest.of(pageNumber - 1, pageSize))
+                .stream().map(orderConverter::convertToDto).toList();
     }
 }
