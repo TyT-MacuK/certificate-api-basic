@@ -5,6 +5,7 @@ plugins {
 dependencies {
     api project(":model")
     implementation group: 'com.zaxxer', name: 'HikariCP', version: hikariVersion
-    implementation group: 'mysql', name: 'mysql-connector-java', version: mysqlConnectorVersion
     implementation group: 'com.h2database', name: 'h2', version: h2Version
+    implementation group: 'org.postgresql', name: 'postgresql', version: postgresqlConnectorVersion
+    //implementation group: 'mysql', name: 'mysql-connector-java', version: mysqlConnectorVersion
 }
