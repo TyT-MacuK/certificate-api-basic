@@ -14,8 +14,8 @@ INSERT INTO gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (2, 2)
 INSERT INTO gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (2, 3);
 INSERT INTO gift_certificate_has_tag (gift_certificate_id, tag_id) VALUES (3, 1);
 
-INSERT INTO user (name, email) VALUES ('Jack', 'jack@gmail.com');
-INSERT INTO user (name, email) VALUES ('Tom', 'tom@gmail.com');
+INSERT INTO users (name, email) VALUES ('Jack', 'jack@gmail.com');
+INSERT INTO users (name, email) VALUES ('Tom', 'tom@gmail.com');
 
 INSERT INTO orders (create_date, cost, gift_certificate_id, user_id) VALUES ('2021-12-27 14:00:00', 10.50, 1, 1);
 INSERT INTO orders (create_date, cost, gift_certificate_id, user_id) VALUES ('2021-12-25 10:00:00', 40, 2, 1);

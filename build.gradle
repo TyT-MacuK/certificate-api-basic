@@ -7,10 +7,15 @@
 //    }
 //}
 
+plugins {
+    id 'jacoco'
+    id "org.sonarqube" version "3.3"
+}
+
 allprojects {
     apply plugin: 'java'
 //    id 'jacoco'
-//    id "org.sonarqube" version "3.3"
+    apply plugin: 'org.sonarqube'
 
 //    apply plugin: 'org.springframework.boot'
 
