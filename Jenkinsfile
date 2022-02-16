@@ -1,6 +1,18 @@
 pipeline {
 	agent any
 	stages {
+		stage('One') {
+			steps {
+				echo 'Hi, this is Soumitra from roytuts'
+			}
+		}
+
+		stage('Two') {
+			steps {
+				input('Do you want to proceed?')
+			}
+		}
+
 		stage('Build') {
             steps {
                 bat './gradlew build'
@@ -18,5 +30,11 @@ pipeline {
                 bat './gradlew check'
             }
         }
+
+		stage('Five') {
+			steps {
+				echo 'Finished'
+			}
+		}
 	}
 }
