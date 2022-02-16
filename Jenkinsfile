@@ -7,7 +7,23 @@ pipeline {
 			}
 		}
 
+		stage('Build') {
+            steps {
+                bat './gradlew build'
+            }
+        }
 
+        stage('Test') {
+            steps {
+                bat './gradlew test'
+            }
+        }
+
+        stage('Check') {
+            steps {
+                bat './gradlew check'
+            }
+        }
 
 		stage('Five') {
 			steps {
