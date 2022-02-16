@@ -3,13 +3,7 @@ pipeline {
 	stages {
 		stage('One') {
 			steps {
-				echo 'Hi, this is Soumitra from roytuts'
-			}
-		}
-
-		stage('Two') {
-			steps {
-				input('Do you want to proceed?')
+				echo 'First step'
 			}
 		}
 
