@@ -1,12 +1,6 @@
 pipeline {
 	agent any
 	stages {
-		stage('One') {
-			steps {
-				echo 'First step'
-			}
-		}
-
 		stage('Build') {
             steps {
                 bat './gradlew build'
@@ -25,10 +19,18 @@ pipeline {
             }
         }
 
-		stage('Five') {
-			steps {
-				echo 'Finished'
-			}
-		}
+        stage('SonarQube analysis') {
+                    steps {
+                        withSonarQubeEnv('sonarqube-9.2.4.50792') {
+                            bat "./gradlew sonarqube"
+                        }
+                    }
+                }
+                stage("Quality gate") {
+                    steps {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
 	}
 }
