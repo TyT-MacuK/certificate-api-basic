@@ -20,14 +20,16 @@ pipeline {
         }
         stage('SonarQube analysis') {
              steps {
-                 withSonarQubeEnv('sonarqube-9.3.0.51899') {
+                 withSonarQubeEnv(installationName: 'SonarQube') {
                      bat "./gradlew sonarqube"
                  }
              }
         }
         stage("Quality gate") {
              steps {
-                 waitForQualityGate abortPipeline: true
+                 timeout(time: 2, unit: 'MINUTES') {
+                     waitForQualityGate abortPipeline: true
+                 }
              }
         }
 	}
