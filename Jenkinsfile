@@ -20,7 +20,7 @@ pipeline {
         }
         stage('SonarQube analysis') {
              steps {
-                 withSonarQubeEnv('sonarqube-9.2.4.50792') {
+                 withSonarQubeEnv('sonarqube-9.3.0.51899') {
                      bat "./gradlew sonarqube"
                  }
              }
