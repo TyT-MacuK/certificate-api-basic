@@ -1,16 +1,22 @@
 pipeline {
-    agent any
+	agent any
+	stages {
+		stage('Build') {
+            steps {
+                bat './gradlew build'
+            }
+        }
 
-    stages {
         stage('Test') {
             steps {
-                bat "./gradlew test"
+                bat './gradlew test'
             }
         }
-        stage('Build') {
+
+        stage('Check') {
             steps {
-                bat "./gradlew build"
+                bat './gradlew check'
             }
         }
-    }
+	}
 }
