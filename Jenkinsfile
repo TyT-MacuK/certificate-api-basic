@@ -38,8 +38,7 @@ pipeline {
 	post {
             success {
                 deploy adapters: [
-                                    tomcat9(url: 'http://localhost:8080',
-                                            credentialsId: 'tomcat-deployer')
+                                    tomcat9(url: 'http://localhost:8080')
                                  ],
                                  war: '**/*.war',
                                  contextPath: 'app'
