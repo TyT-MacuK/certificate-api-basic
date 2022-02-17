@@ -13,9 +13,10 @@ pipeline {
             }
         }
 
-        stage('Check') {
+        stage('Jacoco') {
             steps {
-                bat './gradlew check'
+                bat "./gradlew jacocoTestReport"
+                bat "./gradlew codeCoverageReport"
             }
         }
         stage('SonarQube analysis') {
