@@ -10,15 +10,11 @@ pipeline {
         stage('Test') {
             steps {
                 bat './gradlew test'
-            }
-        }
-
-        stage('Jacoco') {
-            steps {
                 bat "./gradlew jacocoTestReport"
                 bat "./gradlew codeCoverageReport"
             }
         }
+
         stage('SonarQube analysis') {
              steps {
                  withSonarQubeEnv(installationName: 'sq1') {
