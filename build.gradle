@@ -37,10 +37,10 @@ allprojects {
     test {
         useJUnitPlatform()
     }
+}
 
-    sonarqube {
-        properties {
-            property 'sonar.host.url', 'http://localhost:9000'
-        }
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'http://localhost:9000'
     }
 }
