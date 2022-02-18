@@ -1,8 +1,4 @@
 pipeline {
-
-   def tomcatWeb = 'E:\\Programs\\apache-tomcat-9.0.46\\webapps'
-   def tomcatBin = 'E:\\Programs\\apache-tomcat-9.0.46\\bin'
-
 	agent any
 	stages {
 		stage('Build') {
@@ -38,11 +34,11 @@ pipeline {
              }
         }
         stage('Deploy to Tomcat'){
-             bat "copy target\\JenkinsWar.war \"${tomcatWeb}\\JenkinsWar.war\""
+             bat "copy target\\JenkinsWar.war E:\\Programs\\apache-tomcat-9.0.46\\webapps\\JenkinsWar.war\""
         }
         stage ('Start Tomcat Server') {
               sleep(time:5,unit:"SECONDS")
-                 bat "${tomcatBin}\\startup.bat"
+                 bat "E:\\Programs\\apache-tomcat-9.0.46\\bin\\startup.bat"
                  sleep(time:100,unit:"SECONDS")
         }
     }
