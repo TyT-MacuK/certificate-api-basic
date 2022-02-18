@@ -1,8 +1,4 @@
 pipeline {
-
-   def tomcatWeb = 'E:\\Programs\\apache-tomcat-9.0.46\\webapps'
-   def tomcatBin = 'E:\\Programs\\apache-tomcat-9.0.46\\bin'
-
 	agent any
 	stages {
 		stage('Build') {
