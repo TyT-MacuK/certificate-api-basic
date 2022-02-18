@@ -43,7 +43,7 @@ pipeline {
                                  ],
                                  war: '**/*.war',
                                  onFailure: false,
-                                 contextPath: '/certificates'
+                                 contextPath: '\\certificates'
                    }
              }
 	    }
