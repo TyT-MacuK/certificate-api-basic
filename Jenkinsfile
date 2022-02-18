@@ -41,7 +41,8 @@ pipeline {
                                     tomcat9(url: 'http://localhost:8080',
                                             credentialsId: 'deployer')
                                  ],
-                                 war: '**/*.war
+                                 war: '**/*.war',
+                                 contextPath: 'certificates'
             }
         }
 }
