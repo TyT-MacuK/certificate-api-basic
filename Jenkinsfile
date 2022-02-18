@@ -1,4 +1,8 @@
 pipeline {
+
+   def tomcatWeb = 'E:\\Programs\\apache-tomcat-9.0.46\\webapps'
+   def tomcatBin = 'E:\\Programs\\apache-tomcat-9.0.46\\bin'
+
 	agent any
 	stages {
 		stage('Build') {
@@ -33,16 +37,12 @@ pipeline {
                  }
              }
         }
+        stage('Deploy to Tomcat'){
+             bat "copy target\\JenkinsWar.war \"${tomcatWeb}\\JenkinsWar.war\""
+           }
+              stage ('Start Tomcat Server') {
+                 sleep(time:5,unit:"SECONDS")
+                 bat "${tomcatBin}\\startup.bat"
+                 sleep(time:100,unit:"SECONDS")
 	}
-
-	post {
-            success {
-                deploy adapters: [
-                                    tomcat9(url: 'http://localhost:8080',
-                                            credentialsId: 'tomcat-deployer')
-                                 ],
-                                 war: '**/*.war',
-                                 contextPath: 'app'
-            }
-        }
 }
