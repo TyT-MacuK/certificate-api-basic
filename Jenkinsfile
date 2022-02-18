@@ -42,8 +42,7 @@ pipeline {
                                             credentialsId: 'deployer')
                                  ],
                                  war: '**/*.war',
-                                 onFailure: false,
-                                 contextPath: '\\certificates'
+                                 onFailure: false
                    }
              }
 	    }
