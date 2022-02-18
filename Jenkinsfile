@@ -37,14 +37,15 @@ pipeline {
 
 	stage ('Deploy') {
           steps {
-            script {
-                deploy adapters: [
+              script {
+                 deploy adapters: [
                                     tomcat9(url: 'http://localhost:8080',
                                             credentialsId: 'deployer')
                                  ],
                                  war: '**/*.war',
                                  onFailure: false,
                                  contextPath: 'certificates'
-            }
-        }
-}
+                 }
+             }
+         }
+   }
