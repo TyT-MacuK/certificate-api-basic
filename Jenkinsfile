@@ -42,7 +42,7 @@ pipeline {
                                             credentialsId: 'yauheni')
                                  ],
                                  war: '**/*.war',
-                                 contextPath: 'app'
+                                 contextPath: 'certificate-api-basic'
             }
         }
 }
