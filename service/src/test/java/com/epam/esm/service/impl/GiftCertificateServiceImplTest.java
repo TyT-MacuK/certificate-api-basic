@@ -5,7 +5,6 @@ import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateSearchParamsDto;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,8 +17,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +36,10 @@ class GiftCertificateServiceImplTest {
 
     private static GiftCertificateDto certificateDto;
     private static GiftCertificate certificate;
-    private static Tag tag;
 
     @BeforeAll
     static void initialize() {
         MockitoAnnotations.openMocks(GiftCertificateServiceImplTest.class);
-        tag = Tag.builder().name("test").build();
         certificateDto = GiftCertificateDto.builder().build();
         certificate = GiftCertificate.builder().build();
     }
