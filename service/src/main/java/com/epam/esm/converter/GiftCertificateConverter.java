@@ -2,8 +2,12 @@ package com.epam.esm.converter;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The type Gift certificate converter.
@@ -27,8 +31,10 @@ public class GiftCertificateConverter {
                 .duration(dto.getDuration())
                 .createDate(dto.getCreateDay())
                 .lastUpdateDate(dto.getLastUpdateDay())
-                .tags(dto.getTags().stream().map(tagConverter::convertToEntity).toList())
                 .build();
+        List<Tag> tags = dto.getTags() != null ? dto.getTags().stream().map(tagConverter::convertToEntity).toList()
+                : Collections.emptyList();
+        certificate.setTags(tags);
         certificate.setId(dto.getId());
         return certificate;
     }
